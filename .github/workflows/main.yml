@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - main  # or whatever branch you want
+      - '*'  # or whatever branch you want
 
 jobs:
   notify:

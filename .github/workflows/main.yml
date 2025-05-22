@@ -14,7 +14,7 @@ jobs:
           curl -H "Content-Type: application/json" \
             -X POST \
             -d '{
-              "content": "<@&1285206337122467840> Repository Update:",
+              "content": "@everyone Repository Update:",
               "embeds": [
                 {
                   "title": "${{ github.repository }}",

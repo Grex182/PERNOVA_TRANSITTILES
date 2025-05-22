@@ -1,0 +1,26 @@
+on:
+  push:
+    branches:
+      - main  # or whatever branch you want
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send commit message to Discord
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          curl -H "Content-Type: application/json" \
+            -X POST \
+            -d '{
+              "content": "<@&1285206337122467840> Repository Update:",
+              "embeds": [
+                {
+                  "title": "${{ github.repository }}",
+                  "description": "**${{ github.actor }}** pushed to `${{ github.ref_name }}`\n[View Commit](${{ github.event.head_commit.url }})\n\n```\n${{ github.event.head_commit.message }}\n```",
+                  "color": 7506394
+                }
+              ]
+            }' \
+            $DISCORD_WEBHOOK

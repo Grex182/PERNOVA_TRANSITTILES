@@ -14,6 +14,7 @@ public class Board : MonoBehaviour
     private const int TILE_COUNT_X = 8;
     private const int TILE_COUNT_Y = 8;
     private GameObject[,] tiles;
+    private Camera currentCamera;
 
     private void Awake()
     {
@@ -21,6 +22,18 @@ public class Board : MonoBehaviour
     }
     private void Update()
     {
+        if (!currentCamera)
+        {
+            currentCamera = Camera.current;
+            return;
+        }
+
+        RaycastHit info;
+        Ray ray = currentCamera.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out info, 100, LayerMask.GetMask("Tile")))
+        {
+
+        }
     }
 
     private void GenerateAllTiles(float tileSize, int tileCountX, int tileCountY)

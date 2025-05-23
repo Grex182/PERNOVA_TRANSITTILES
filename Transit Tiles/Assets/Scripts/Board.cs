@@ -21,6 +21,7 @@ public class Board : MonoBehaviour
     }
     private void Update()
     {
+        //UAPDJWALIKD
     }
 
     private void GenerateAllTiles(float tileSize, int tileCountX, int tileCountY)

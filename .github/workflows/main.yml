@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - '*'  # or whatever branch you want
+      - '**'  # or whatever branch you want
 
 jobs:
   notify:
@@ -15,9 +15,6 @@ jobs:
             -X POST \
             -d '{
               "content": "@everyone Repository Update:",
-              "allowed_mentions": {
-                "parse": ["everyone"]
-              }
               "embeds": [
                 {
                   "title": "${{ github.repository }}",

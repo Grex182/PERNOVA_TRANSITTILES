@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - '**'  # or whatever branch you want
+      - '**'
 
 jobs:
   notify:
@@ -10,22 +10,21 @@ jobs:
       - name: Send commit message to Discord
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
-        run: |
-          curl -H "Content-Type: application/json" \
-            -X POST \
-            -d '{
-              "content": "@everyone Repository Update:",
-              "embeds": [
-                {
-                  "title": "${{ github.repository }}",
-                  "description": "**${{ github.actor }}** pushed to `${{ github.ref_name }}`\n[View Commit](${{ github.event.head_commit.url }})\n\n```\n${{ github.event.head_commit.message }}\n```",
-                  "color": 16776960,
-                  "author": {
-                    "name": "${{ github.actor }}",
-                    "url": "https://github.com/${{ github.actor }}",
-                    "icon_url": "https://github.com/${{ github.actor }}.png"
-                  }
+        run: >
+          curl -H "Content-Type: application/json" -X POST -d @- $DISCORD_WEBHOOK <<EOF
+          {
+            "content": "@everyone Repository Update:",
+            "embeds": [
+              {
+                "title": "${{ github.repository }}",
+                "description": "**${{ github.actor }}** pushed to \`${{ github.ref_name }}\`\n[View Commit](${{ github.event.head_commit.url }})\n\n\`\`\`\n${{ github.event.head_commit.message }}\n\`\`\`",
+                "color": 16776960,
+                "author": {
+                  "name": "${{ github.actor }}",
+                  "url": "https://github.com/${{ github.actor }}",
+                  "icon_url": "https://github.com/${{ github.actor }}.png"
                 }
-              ]
-            }' \
-            $DISCORD_WEBHOOK
+              }
+            ]
+          }
+          EOF

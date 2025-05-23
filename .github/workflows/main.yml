@@ -1,31 +1,37 @@
 on:
   push:
     branches:
-      - '**'  # or whatever branch you want
+      - '**'
 
 jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
-      - name: Send commit message to Discord
+      - name: Extract commit info and notify Discord
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: |
+          LAST_COMMIT_MESSAGE=$(jq -r '.commits[-1].message' "$GITHUB_EVENT_PATH")
+          LAST_COMMIT_URL=$(jq -r '.commits[-1].url' "$GITHUB_EVENT_PATH")
+
           curl -H "Content-Type: application/json" \
             -X POST \
-            -d '{
-              "content": "@everyone Repository Update:",
-              "embeds": [
+            -d "{
+              \"content\": \"@everyone Repository Update:\",
+              \"allowed_mentions\": {
+                \"parse\": [\"everyone\"]
+              },
+              \"embeds\": [
                 {
-                  "title": "${{ github.repository }}",
-                  "description": "**${{ github.actor }}** pushed to `${{ github.ref_name }}`\n[View Commit](${{ github.event.head_commit.url }})\n\n```\n${{ github.event.head_commit.message }}\n```",
-                  "color": 16776960,
-                  "author": {
-                    "name": "${{ github.actor }}",
-                    "url": "https://github.com/${{ github.actor }}",
-                    "icon_url": "https://github.com/${{ github.actor }}.png"
+                  \"title\": \"${{ github.repository }}\",
+                  \"description\": \"**${{ github.actor }}** pushed to \\\`${{ github.ref_name }}\\\`\n[View Commit](${LAST_COMMIT_URL})\n\n\\\`\`\`\n${LAST_COMMIT_MESSAGE}\n\\\`\`\`\",
+                  \"color\": 16776960,
+                  \"author\": {
+                    \"name\": \"${{ github.actor }}\",
+                    \"url\": \"https://github.com/${{ github.actor }}\",
+                    \"icon_url\": \"https://github.com/${{ github.actor }}.png\"
                   }
                 }
               ]
-            }' \
+            }" \
             $DISCORD_WEBHOOK

@@ -11,13 +11,11 @@ jobs:
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: |
-          if [ "$(jq '.commits | length' "$GITHUB_EVENT_PATH")" -eq 0 ]; then
-            echo "No commits found in this push event. Skipping notification."
-            exit 0
-          fi
-
-          LAST_COMMIT_MESSAGE=$(jq -r '.commits[-1].message' "$GITHUB_EVENT_PATH")
-          LAST_COMMIT_URL=$(jq -r '.commits[-1].url' "$GITHUB_EVENT_PATH")
+          COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
+          COMMIT_URL="${{ github.event.head_commit.url }}"
+          REPO_NAME="${{ github.repository }}"
+          ACTOR="${{ github.actor }}"
+          BRANCH="${{ github.ref_name }}"
 
           read -r -d '' PAYLOAD <<EOF
           {
@@ -27,20 +25,20 @@ jobs:
             },
             "embeds": [
               {
-                "title": "${{ github.repository }}",
-                "description": "**${{ github.actor }}** pushed to \${{ github.ref_name }}\\n[View Commit](${LAST_COMMIT_URL})\n\n\\\\n${LAST_COMMIT_MESSAGE}\n\\\",
+                "title": "${REPO_NAME}",
+                "description": "**${ACTOR}** pushed to \`${BRANCH}\`\n[View Commit](${COMMIT_URL})\n\n\`\`\`\n${COMMIT_MESSAGE}\n\`\`\`",
                 "color": 16776960,
                 "author": {
-                  "name": "${{ github.actor }}",
-                  "url": "https://github.com/${{ github.actor }}",
-                  "icon_url": "https://github.com/${{ github.actor }}.png"
+                  "name": "${ACTOR}",
+                  "url": "https://github.com/${ACTOR}",
+                  "icon_url": "https://github.com/${ACTOR}.png"
                 }
               }
             ]
           }
-          EOF
-          
-                    curl -H "Content-Type: application/json" \
-                         -X POST \
-                         -d "$PAYLOAD" \
-                         $DISCORD_WEBHOOK
+EOF
+
+          curl -H "Content-Type: application/json" \
+               -X POST \
+               -d "$PAYLOAD" \
+               "$DISCORD_WEBHOOK"

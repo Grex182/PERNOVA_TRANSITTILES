@@ -10,21 +10,32 @@ jobs:
       - name: Send commit message to Discord
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
-        run: >
-          curl -H "Content-Type: application/json" -X POST -d @- $DISCORD_WEBHOOK <<EOF
-          {
-            "content": "@everyone Repository Update:",
-            "embeds": [
-              {
-                "title": "${{ github.repository }}",
-                "description": "**${{ github.actor }}** pushed to \`${{ github.ref_name }}\`\n[View Commit](${{ github.event.head_commit.url }})\n\n\`\`\`\n${{ github.event.head_commit.message }}\n\`\`\`",
-                "color": 16776960,
-                "author": {
-                  "name": "${{ github.actor }}",
-                  "url": "https://github.com/${{ github.actor }}",
-                  "icon_url": "https://github.com/${{ github.actor }}.png"
-                }
-              }
-            ]
-          }
-          EOF
+          REPO: ${{ github.repository }}
+          ACTOR: ${{ github.actor }}
+          BRANCH: ${{ github.ref_name }}
+          COMMIT_URL: ${{ github.event.head_commit.url }}
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+        run: |
+          jq -n --arg repo "$REPO" \
+                --arg actor "$ACTOR" \
+                --arg branch "$BRANCH" \
+                --arg url "$COMMIT_URL" \
+                --arg message "$COMMIT_MESSAGE" \
+                '{
+                  content: "@everyone Repository Update:",
+                  embeds: [{
+                    title: $repo,
+                    description: "**\($actor)** pushed to `\($branch)`\n[View Commit](\($url))\n\n```\n\($message)\n```",
+                    color: 16776960,
+                    author: {
+                      name: $actor,
+                      url: "https://github.com/\($actor)",
+                      icon_url: "https://github.com/\($actor).png"
+                    }
+                  }]
+                }' > payload.json
+
+          curl -H "Content-Type: application/json" \
+               -X POST \
+               -d @payload.json \
+               "$DISCORD_WEBHOOK"

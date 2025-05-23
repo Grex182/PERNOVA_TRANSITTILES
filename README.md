@@ -1,2 +1,2 @@
 # TRANSIT TILES CAPSTN1 & CAPSTN2
-idk
+A game about arranging passengers inside trains and stuff.

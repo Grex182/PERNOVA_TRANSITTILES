@@ -22,7 +22,6 @@ public class Board : MonoBehaviour
     private void Update()
     {
         //some update stuff ig
-        //welp gl to everyone here or ok gbye
     }
 
     private void GenerateAllTiles(float tileSize, int tileCountX, int tileCountY)

@@ -1,44 +1,33 @@
 on:
   push:
     branches:
-      - '**'  # Matches all branches
+      - '*'  # or whatever branch you want
 
 jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
-      - name: Notify Discord of any push
+      - name: Send commit message to Discord
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: |
-          COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
-          COMMIT_URL="${{ github.event.head_commit.url }}"
-          REPO_NAME="${{ github.repository }}"
-          ACTOR="${{ github.actor }}"
-          BRANCH="${{ github.ref_name }}"
-
-          read -r -d '' PAYLOAD <<EOF
-          {
-            "content": "@everyone Repository Update:",
-            "allowed_mentions": {
-              "parse": ["everyone"]
-            },
-            "embeds": [
-              {
-                "title": "${REPO_NAME}",
-                "description": "**${ACTOR}** pushed to \`${BRANCH}\`\n[View Commit](${COMMIT_URL})\n\n\`\`\`\n${COMMIT_MESSAGE}\n\`\`\`",
-                "color": 16776960,
-                "author": {
-                  "name": "${ACTOR}",
-                  "url": "https://github.com/${ACTOR}",
-                  "icon_url": "https://github.com/${ACTOR}.png"
+          curl -H "Content-Type: application/json" \
+            -X POST \
+            -d '{
+              "content": "@everyone Repository Update:",
+              "embeds": [
+                {
+                  "title": "${{ github.repository }}",
+                  "description": "**${{ github.actor }}** pushed to ${{ github.ref_name }}\n[View Commit](${{ github.event.head_commit.url }})\n\n
+                  \n${{ github.event.head_commit.message }}\n
+                  ",
+                  "color": 16776960,
+                  "author": {
+                    "name": "${{ github.actor }}",
+                    "url": "https://github.com/${{ github.actor }}",
+                    "icon_url": "https://github.com/${{ github.actor }}.png"
+                  }
                 }
-              }
-            ]
-          }
-          EOF
-          
-                    curl -H "Content-Type: application/json" \
-                         -X POST \
-                         -d "$PAYLOAD" \
-                         "$DISCORD_WEBHOOK"
+              ]
+            }' \
+            $DISCORD_WEBHOOK

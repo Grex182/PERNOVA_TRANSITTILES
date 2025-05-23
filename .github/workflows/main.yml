@@ -15,6 +15,9 @@ jobs:
             -X POST \
             -d '{
               "content": "@everyone Repository Update:",
+              "allowed_mentions": {
+                "parse": ["everyone"]
+              }
               "embeds": [
                 {
                   "title": "${{ github.repository }}",

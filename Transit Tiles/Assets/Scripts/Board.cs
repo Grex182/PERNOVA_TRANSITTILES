@@ -10,16 +10,27 @@ public class Board : MonoBehaviour
     [Header("Tile Settings")]
     [SerializeField] private float tileSize = 1f;
     [SerializeField] private float gapSize = 0.1f;
+    [SerializeField] private float yOffset = 0.2f;
+    [SerializeField] private Vector3 boardCenter = Vector3.zero;
 
-    private const int TILE_COUNT_X = 8;
-    private const int TILE_COUNT_Y = 8;
+    [Header("Prefabs & Materials")]
+    [SerializeField] private GameObject[] prefabs;
+
+    private Passenger[,] passengers;
+    [SerializeField] private int tileCountX = 8;
+    [SerializeField] private int tileCountY = 8;
     private GameObject[,] tiles;
     private Camera currentCamera;
     private Vector2Int currentHover;
+    private Vector3 bounds;
 
     private void Awake()
     {
-        GenerateAllTiles(tileSize, TILE_COUNT_X, TILE_COUNT_Y);
+        GenerateAllTiles(tileSize, tileCountX, tileCountY);
+
+        SpawnAllPieces();
+
+        PositionAllPieces();
     }
     private void Update()
     {
@@ -65,6 +76,9 @@ public class Board : MonoBehaviour
     //Generates the board
     private void GenerateAllTiles(float tileSize, int tileCountX, int tileCountY)
     {
+        yOffset += transform.position.y;
+        bounds = new Vector3((tileCountX / 2) * tileSize, 0, (tileCountX / 2) * tileSize) + boardCenter;
+
         tiles = new GameObject[tileCountX, tileCountY];
         for (int x = 0; x < tileCountX; x++)
         {
@@ -88,10 +102,10 @@ public class Board : MonoBehaviour
         float gapOffsetY = y * (tileSize + gapSize);
 
         Vector3[] vertices = new Vector3[4];
-        vertices[0] = new Vector3(gapOffsetX, 0, gapOffsetY);
-        vertices[1] = new Vector3(gapOffsetX, 0, gapOffsetY + tileSize);
-        vertices[2] = new Vector3(gapOffsetX + tileSize, 0, gapOffsetY);
-        vertices[3] = new Vector3(gapOffsetX + tileSize, 0, gapOffsetY + tileSize);
+        vertices[0] = new Vector3(gapOffsetX, yOffset, gapOffsetY) - bounds;
+        vertices[1] = new Vector3(gapOffsetX, yOffset, gapOffsetY + tileSize) - bounds;
+        vertices[2] = new Vector3(gapOffsetX + tileSize, yOffset, gapOffsetY) - bounds;
+        vertices[3] = new Vector3(gapOffsetX + tileSize, yOffset, gapOffsetY + tileSize) - bounds;
 
         int[] tris = new int[] { 0, 1, 2, 1, 3, 2 };
 
@@ -105,12 +119,61 @@ public class Board : MonoBehaviour
         return tileObject;
     }
 
+    //Spawning Pieces
+    private void SpawnAllPieces()
+    {
+        passengers = new Passenger[tileCountX, tileCountY];
+
+        passengers[0, 0] = SpawnSinglePiece(PassengerType.Pawn);
+        passengers[0, 3] = SpawnSinglePiece(PassengerType.Pawn);
+    }
+
+    private Passenger SpawnSinglePiece(PassengerType type)
+    {
+        Passenger passenger = Instantiate(prefabs[(int)type - 1], transform).GetComponent<Passenger>();
+        passenger.transform.localScale = Vector3.one;
+
+        passenger.type = type;
+
+        return passenger;
+    }
+
+    //Positioning
+    private void PositionAllPieces() //snaps all the pieces where they're supposed to be (useful for spawning pieces at the start of game or round)
+    {
+        for (int x = 0; x < tileCountX; x++)
+        {
+            for (int y = 0; y < tileCountY; y++)
+            {
+                if (passengers[x, y] != null)
+                {
+                    PositionSinglePiece(x, y, true);
+                }
+            }
+        }
+    }
+
+    private void PositionSinglePiece(int x, int y, bool force = false)
+    {
+        passengers[x, y].currentX = x;
+        passengers[x, y].currentY = y;
+        passengers[x, y].transform.position = GetTileCenter(x, y);
+    }
+
+    private Vector3 GetTileCenter(int x, int y)
+    {
+        float xPos = x * (tileSize + gapSize);
+        float zPos = y * (tileSize + gapSize);
+
+        return new Vector3(xPos, yOffset, zPos) - bounds + new Vector3(tileSize / 2, 0, tileSize / 2);
+    }
+
     //Operations
     private Vector2Int LookupTileIndex(GameObject hitInfo)
     {
-        for (int x = 0; x < TILE_COUNT_X; x++)
+        for (int x = 0; x < tileCountX; x++)
         {
-            for (int y = 0; y < TILE_COUNT_Y; y++)
+            for (int y = 0; y < tileCountY; y++)
             {
                 if (tiles[x, y] == hitInfo)
                 {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,6 +19,7 @@ public class Board : MonoBehaviour
     [SerializeField] private float yPositionOffset;
 
     private Passenger[,] passengers;
+    private Passenger currentlyDragging;
     [SerializeField] private int tileCountX = 8;
     [SerializeField] private int tileCountY = 8;
     private GameObject[,] tiles;
@@ -62,6 +64,29 @@ public class Board : MonoBehaviour
                 tiles[currentHover.x, currentHover.y].layer = LayerMask.NameToLayer("Tile");
                 currentHover = hitPosition;
                 tiles[hitPosition.x, hitPosition.y].layer = LayerMask.NameToLayer("Hover");
+            }
+
+            //If press down on mouse
+            if (Input.GetMouseButtonDown(0))
+            {
+                if (passengers[hitPosition.x, hitPosition.y] != null)
+                {
+                    currentlyDragging = passengers[hitPosition.x, hitPosition.y];
+                }
+            }
+
+            //If releasing mouse button
+            if (currentlyDragging != null && Input.GetMouseButtonUp(0))
+            {
+                Vector2Int previousPosition = new Vector2Int(currentlyDragging.currentX, currentlyDragging.currentY);
+
+                bool validMove = MoveTo(currentlyDragging, hitPosition.x, hitPosition.y);
+
+                if (!validMove)
+                {
+                    currentlyDragging.transform.position = GetTileCenter(previousPosition.x, previousPosition.y);
+                    currentlyDragging = null;
+                }
             }
         }
         else
@@ -170,6 +195,18 @@ public class Board : MonoBehaviour
     }
 
     //Operations
+    private bool MoveTo(Passenger passenger, int x, int y)
+    {
+        Vector2Int previousPosition = new Vector2Int(passenger.currentX, passenger.currentY);
+
+        passengers[x, y] = passenger;
+        passengers[previousPosition.x, previousPosition.y] = null;
+
+        PositionSinglePiece(x, y);
+
+        return true;
+    }
+
     private Vector2Int LookupTileIndex(GameObject hitInfo)
     {
         for (int x = 0; x < tileCountX; x++)

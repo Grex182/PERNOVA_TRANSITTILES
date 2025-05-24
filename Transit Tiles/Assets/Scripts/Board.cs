@@ -15,6 +15,7 @@ public class Board : MonoBehaviour
     private const int TILE_COUNT_Y = 8;
     private GameObject[,] tiles;
     private Camera currentCamera;
+    private Vector2Int currentHover;
 
     private void Awake()
     {
@@ -22,20 +23,46 @@ public class Board : MonoBehaviour
     }
     private void Update()
     {
+        //For putting in the highlighting part of the board
         if (!currentCamera)
         {
-            currentCamera = Camera.current;
+            currentCamera = Camera.main;
             return;
         }
 
         RaycastHit info;
         Ray ray = currentCamera.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out info, 100, LayerMask.GetMask("Tile")))
+        if (Physics.Raycast(ray, out info, 100, LayerMask.GetMask("Tile", "Hover")))
         {
+            //Get the indexes of the tile the player hits
+            Vector2Int hitPosition = LookupTileIndex(info.transform.gameObject);
 
+            //If hovering over tile after not hovering any tiles
+            if (currentHover == -Vector2Int.one)
+            {
+                currentHover = hitPosition;
+                tiles[hitPosition.x, hitPosition.y].layer = LayerMask.NameToLayer("Hover");
+            }
+
+            //If already hovering tile, change previous one
+            if (currentHover != hitPosition)
+            {
+                tiles[currentHover.x, currentHover.y].layer = LayerMask.NameToLayer("Tile");
+                currentHover = hitPosition;
+                tiles[hitPosition.x, hitPosition.y].layer = LayerMask.NameToLayer("Hover");
+            }
+        }
+        else
+        {
+            if (currentHover != -Vector2Int.one)
+            {
+                tiles[currentHover.x, currentHover.y].layer = LayerMask.NameToLayer("Tile");
+                currentHover = -Vector2Int.one;
+            }
         }
     }
 
+    //Generates the board
     private void GenerateAllTiles(float tileSize, int tileCountX, int tileCountY)
     {
         tiles = new GameObject[tileCountX, tileCountY];
@@ -72,8 +99,26 @@ public class Board : MonoBehaviour
         mesh.triangles = tris;
         mesh.RecalculateNormals();
 
+        tileObject.layer = LayerMask.NameToLayer("Tile");
         tileObject.AddComponent<BoxCollider>();
 
         return tileObject;
+    }
+
+    //Operations
+    private Vector2Int LookupTileIndex(GameObject hitInfo)
+    {
+        for (int x = 0; x < TILE_COUNT_X; x++)
+        {
+            for (int y = 0; y < TILE_COUNT_Y; y++)
+            {
+                if (tiles[x, y] == hitInfo)
+                {
+                    return new Vector2Int(x, y);
+                }    
+            }
+        }
+
+        return -Vector2Int.one; //INvalid
     }
 }

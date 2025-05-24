@@ -159,6 +159,7 @@ MonoBehaviour:
   boardCenter: {x: 0, y: 0, z: 0}
   prefabs:
   - {fileID: 8569515437451751323, guid: 9a6357dbac858a647b4c979d919ba37e, type: 3}
+  yPositionOffset: 1
   tileCountX: 8
   tileCountY: 6
 --- !u!4 &58632780

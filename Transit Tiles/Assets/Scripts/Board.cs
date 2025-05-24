@@ -15,6 +15,7 @@ public class Board : MonoBehaviour
 
     [Header("Prefabs & Materials")]
     [SerializeField] private GameObject[] prefabs;
+    [SerializeField] private float yPositionOffset;
 
     private Passenger[,] passengers;
     [SerializeField] private int tileCountX = 8;
@@ -165,7 +166,7 @@ public class Board : MonoBehaviour
         float xPos = x * (tileSize + gapSize);
         float zPos = y * (tileSize + gapSize);
 
-        return new Vector3(xPos, yOffset, zPos) - bounds + new Vector3(tileSize / 2, 0, tileSize / 2);
+        return new Vector3(xPos, yOffset + yPositionOffset, zPos) - bounds + new Vector3(tileSize / 2, 0, tileSize / 2);
     }
 
     //Operations

@@ -7,6 +7,7 @@ public class Board : MonoBehaviour
 {
     [Header("Art")]
     [SerializeField] private Material tileMaterial;
+    [SerializeField] private float dragOffset = 1.25f;
 
     [Header("Tile Settings")]
     [SerializeField] private float tileSize = 1f;
@@ -87,6 +88,10 @@ public class Board : MonoBehaviour
                     currentlyDragging.SetPosition(GetTileCenter(previousPosition.x, previousPosition.y));
                     currentlyDragging = null;
                 }
+                else
+                {
+                    currentlyDragging = null;
+                }
             }
         }
         else
@@ -96,6 +101,21 @@ public class Board : MonoBehaviour
                 tiles[currentHover.x, currentHover.y].layer = LayerMask.NameToLayer("Tile");
                 currentHover = -Vector2Int.one;
             }
+
+            if (currentlyDragging && Input.GetMouseButtonUp(0))
+            {
+                currentlyDragging.SetPosition(GetTileCenter(currentlyDragging.currentX, currentlyDragging.currentY));
+                currentlyDragging = null;
+            }
+        }
+
+        //IF dragging a piece
+        if (currentlyDragging)
+        {
+            Plane horizontalPlane = new Plane(Vector3.up, Vector3.up * yOffset);
+            float distance = 0.0f;
+            if (horizontalPlane.Raycast(ray, out distance))
+                currentlyDragging.SetPosition(ray.GetPoint(distance) + Vector3.up * dragOffset);
         }
     }
 

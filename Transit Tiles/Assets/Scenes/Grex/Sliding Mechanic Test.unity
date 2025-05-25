@@ -153,6 +153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tileMaterial: {fileID: 2100000, guid: 705c3d64307279a48a8c7b95d3389de3, type: 2}
+  dragOffset: 1.5
   tileSize: 1.4
   gapSize: 0.1
   yOffset: 0.6

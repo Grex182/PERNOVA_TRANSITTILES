@@ -84,7 +84,7 @@ public class Board : MonoBehaviour
 
                 if (!validMove)
                 {
-                    currentlyDragging.transform.position = GetTileCenter(previousPosition.x, previousPosition.y);
+                    currentlyDragging.SetPosition(GetTileCenter(previousPosition.x, previousPosition.y));
                     currentlyDragging = null;
                 }
             }
@@ -183,7 +183,7 @@ public class Board : MonoBehaviour
     {
         passengers[x, y].currentX = x;
         passengers[x, y].currentY = y;
-        passengers[x, y].transform.position = GetTileCenter(x, y);
+        passengers[x, y].SetPosition(GetTileCenter(x, y), force);
     }
 
     private Vector3 GetTileCenter(int x, int y)
@@ -198,6 +198,15 @@ public class Board : MonoBehaviour
     private bool MoveTo(Passenger passenger, int x, int y)
     {
         Vector2Int previousPosition = new Vector2Int(passenger.currentX, passenger.currentY);
+
+        //Is there another piece on target position?
+        if (passengers[x, y] != null)
+        {
+            //op means other passenger
+            Passenger op = passengers[x, y];
+
+            return false;
+        }
 
         passengers[x, y] = passenger;
         passengers[previousPosition.x, previousPosition.y] = null;

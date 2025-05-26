@@ -21,6 +21,7 @@ public class Board : MonoBehaviour
 
     private Passenger[,] passengers;
     private Passenger currentlyDragging;
+    private List<Vector2Int> availableMoves = new List<Vector2Int>();
     [SerializeField] private int tileCountX = 8;
     [SerializeField] private int tileCountY = 8;
     private GameObject[,] tiles;
@@ -47,7 +48,7 @@ public class Board : MonoBehaviour
 
         RaycastHit info;
         Ray ray = currentCamera.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out info, 100, LayerMask.GetMask("Tile", "Hover")))
+        if (Physics.Raycast(ray, out info, 100, LayerMask.GetMask("Tile", "Hover", "MovableSpot")))
         {
             //Get the indexes of the tile the player hits
             Vector2Int hitPosition = LookupTileIndex(info.transform.gameObject);
@@ -62,7 +63,7 @@ public class Board : MonoBehaviour
             //If already hovering tile, change previous one
             if (currentHover != hitPosition)
             {
-                tiles[currentHover.x, currentHover.y].layer = LayerMask.NameToLayer("Tile");
+                tiles[currentHover.x, currentHover.y].layer = (ContainsValidMove(ref availableMoves, currentHover)) ? LayerMask.NameToLayer("MovableSpot") : LayerMask.NameToLayer("Tile");
                 currentHover = hitPosition;
                 tiles[hitPosition.x, hitPosition.y].layer = LayerMask.NameToLayer("Hover");
             }
@@ -73,6 +74,10 @@ public class Board : MonoBehaviour
                 if (passengers[hitPosition.x, hitPosition.y] != null)
                 {
                     currentlyDragging = passengers[hitPosition.x, hitPosition.y];
+
+                    //Get list of where passenger can go
+                    availableMoves = currentlyDragging.GetAvailableMoves(ref passengers, tileCountX, tileCountY);
+                    CreateMovableTiles();
                 }
             }
 
@@ -83,22 +88,21 @@ public class Board : MonoBehaviour
 
                 bool validMove = MoveTo(currentlyDragging, hitPosition.x, hitPosition.y);
 
+                //go back to previous position
                 if (!validMove)
                 {
                     currentlyDragging.SetPosition(GetTileCenter(previousPosition.x, previousPosition.y));
-                    currentlyDragging = null;
                 }
-                else
-                {
-                    currentlyDragging = null;
-                }
+
+                currentlyDragging = null;
+                RemoveMovableTiles();
             }
         }
         else
         {
             if (currentHover != -Vector2Int.one)
             {
-                tiles[currentHover.x, currentHover.y].layer = LayerMask.NameToLayer("Tile");
+                tiles[currentHover.x, currentHover.y].layer = (ContainsValidMove(ref availableMoves, currentHover)) ? LayerMask.NameToLayer("MovableSpot") : LayerMask.NameToLayer("Tile");
                 currentHover = -Vector2Int.one;
             }
 
@@ -106,6 +110,7 @@ public class Board : MonoBehaviour
             {
                 currentlyDragging.SetPosition(GetTileCenter(currentlyDragging.currentX, currentlyDragging.currentY));
                 currentlyDragging = null;
+                RemoveMovableTiles();
             }
         }
 
@@ -214,9 +219,44 @@ public class Board : MonoBehaviour
         return new Vector3(xPos, yOffset + yPositionOffset, zPos) - bounds + new Vector3(tileSize / 2, 0, tileSize / 2);
     }
 
+    private void CreateMovableTiles()
+    {
+        for (int i = 0; i < availableMoves.Count; i++)
+        {
+            tiles[availableMoves[i].x, availableMoves[i].y].layer = LayerMask.NameToLayer("MovableSpot");
+        }
+    }
+    private void RemoveMovableTiles()
+    {
+        for (int i = 0; i < availableMoves.Count; i++)
+        {
+            tiles[availableMoves[i].x, availableMoves[i].y].layer = LayerMask.NameToLayer("Tile");
+        }
+
+        availableMoves.Clear();
+    }
+
     //Operations
+    private bool ContainsValidMove(ref List<Vector2Int> moves, Vector2 pos)
+    {
+        for (int i = 0; i < moves.Count; i++)
+        {
+            if (moves[i].x == pos.x && moves[i].y == pos.y)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private bool MoveTo(Passenger passenger, int x, int y)
     {
+        if (!ContainsValidMove(ref availableMoves, new Vector2(x, y)))
+        {
+            return false;
+        }
+
         Vector2Int previousPosition = new Vector2Int(passenger.currentX, passenger.currentY);
 
         //Is there another piece on target position?
@@ -251,4 +291,7 @@ public class Board : MonoBehaviour
 
         return -Vector2Int.one; //INvalid
     }
+
+    //Possible Debug stuff (Might need to move to GameManager?)
+
 }

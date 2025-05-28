@@ -3,12 +3,13 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Occupied
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Game Object
   - Water
   - UI
   - Tile

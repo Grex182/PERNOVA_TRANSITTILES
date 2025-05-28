@@ -50,7 +50,7 @@ public class Board : MonoBehaviour
 
         RaycastHit info;
         Ray ray = currentCamera.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out info, 100, LayerMask.GetMask("Tile", "Hover", "MovableSpot")))
+        if (Physics.Raycast(ray, out info, 100, LayerMask.GetMask("Tile", "Hover", "MovableSpot", "Occupied")))
         {
             //Get the indexes of the tile the player hits
             Vector2Int hitPosition = LookupTileIndex(info.transform.gameObject);
@@ -65,7 +65,18 @@ public class Board : MonoBehaviour
             //If already hovering tile, change previous one
             if (currentHover != hitPosition)
             {
-                tiles[currentHover.x, currentHover.y].layer = (ContainsValidMove(ref availableMoves, currentHover)) ? LayerMask.NameToLayer("MovableSpot") : LayerMask.NameToLayer("Tile");
+                if (ContainsValidMove(ref availableMoves, currentHover))
+                {
+                    tiles[currentHover.x, currentHover.y].layer = LayerMask.NameToLayer("MovableSpot");
+                }
+                else if (passengers[currentHover.x, currentHover.y] != null)
+                {
+                    tiles[currentHover.x, currentHover.y].layer = LayerMask.NameToLayer("Occupied");
+                }
+                else
+                {
+                    tiles[currentHover.x, currentHover.y].layer = LayerMask.NameToLayer("Tile");
+                }
                 currentHover = hitPosition;
                 tiles[hitPosition.x, hitPosition.y].layer = LayerMask.NameToLayer("Hover");
             }
@@ -88,6 +99,8 @@ public class Board : MonoBehaviour
             {
                 Vector2Int previousPosition = new Vector2Int(currentlyDragging.currentX, currentlyDragging.currentY);
 
+                tiles[previousPosition.x, previousPosition.y].layer = LayerMask.NameToLayer("Tile");
+
                 bool validMove = MoveTo(currentlyDragging, hitPosition.x, hitPosition.y);
 
                 //go back to previous position
@@ -96,15 +109,29 @@ public class Board : MonoBehaviour
                     currentlyDragging.SetPosition(GetTileCenter(previousPosition.x, previousPosition.y));
                 }
 
-                currentlyDragging = null;
                 RemoveMovableTiles();
+
+                tiles[currentlyDragging.currentX, currentlyDragging.currentY].layer = LayerMask.NameToLayer("Occupied");
+
+                currentlyDragging = null;
             }
         }
         else
         {
             if (currentHover != -Vector2Int.one)
             {
-                tiles[currentHover.x, currentHover.y].layer = (ContainsValidMove(ref availableMoves, currentHover)) ? LayerMask.NameToLayer("MovableSpot") : LayerMask.NameToLayer("Tile");
+                if (ContainsValidMove(ref availableMoves, currentHover))
+                {
+                    tiles[currentHover.x, currentHover.y].layer = LayerMask.NameToLayer("MovableSpot");
+                }
+                else if (passengers[currentHover.x, currentHover.y] != null)
+                {
+                    tiles[currentHover.x, currentHover.y].layer = LayerMask.NameToLayer("Occupied");
+                }
+                else
+                {
+                    tiles[currentHover.x, currentHover.y].layer = LayerMask.NameToLayer("Tile");
+                }
                 currentHover = -Vector2Int.one;
             }
 
@@ -178,8 +205,11 @@ public class Board : MonoBehaviour
     {
         passengers = new Passenger[tileCountX, tileCountY];
 
+        //the tiles[0, 0] part should be equal to the line before it, like if passengers[0, 3], then afterwards the tiles one should be tiles[0, 3] so that when it spawns, the tile below it has its layer set to "Occupied"
         passengers[0, 0] = SpawnSinglePiece(PassengerType.Pawn);
+        tiles[0, 0].layer = LayerMask.NameToLayer("Occupied");
         passengers[0, 3] = SpawnSinglePiece(PassengerType.Pawn);
+        tiles[0, 3].layer = LayerMask.NameToLayer("Occupied");
     }
 
     private Passenger SpawnSinglePiece(PassengerType type)

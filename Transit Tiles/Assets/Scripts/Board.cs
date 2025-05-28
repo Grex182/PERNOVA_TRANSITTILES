@@ -17,6 +17,8 @@ public class Board : MonoBehaviour
 
     [Header("Prefabs & Materials")]
     [SerializeField] private GameObject[] prefabs;
+    [SerializeField] private GameObject floorTile;
+    [SerializeField] private float yOffsetFloorTile;
     [SerializeField] private float yPositionOffset;
 
     private Passenger[,] passengers;
@@ -136,6 +138,7 @@ public class Board : MonoBehaviour
             for (int y = 0; y < tileCountY; y++)
             {
                 tiles[x, y] = GenerateSingleTile(tileSize, x, y);
+                Instantiate(floorTile, new Vector3 (GetTileCenter(x, y).x, yOffsetFloorTile, GetTileCenter(x, y).z), Quaternion.Euler(-90, 0, 0));
             }
         }
     }

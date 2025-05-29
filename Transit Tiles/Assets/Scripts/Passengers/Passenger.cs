@@ -21,7 +21,7 @@ public class Passenger : MonoBehaviour
     public PassengerType type;
 
     private Vector3 desiredPosition;
-    private Vector3 desiredScale = Vector3.one;
+    [SerializeField] private Vector3 desiredScale = Vector3.one;
 
     private void Update()
     {
@@ -52,7 +52,7 @@ public class Passenger : MonoBehaviour
         }
     }
 
-    public virtual void SetScale(Vector3 scale, bool force = false)
+/*    public virtual void SetScale(Vector3 scale, bool force = false)
     {
         desiredScale = scale;
 
@@ -60,5 +60,5 @@ public class Passenger : MonoBehaviour
         {
             transform.localScale = desiredScale;
         }
-    }
+    }*/
 }

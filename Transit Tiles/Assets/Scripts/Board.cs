@@ -165,7 +165,7 @@ public class Board : MonoBehaviour
             for (int y = 0; y < tileCountY; y++)
             {
                 tiles[x, y] = GenerateSingleTile(tileSize, x, y);
-                Instantiate(floorTile, new Vector3 (GetTileCenter(x, y).x, yOffsetFloorTile, GetTileCenter(x, y).z), Quaternion.Euler(-90, 0, 0));
+                Instantiate(floorTile, new Vector3(GetTileCenter(x, y).x, yOffsetFloorTile, GetTileCenter(x, y).z), Quaternion.Euler(-90, 0, 0));
             }
         }
     }
@@ -206,16 +206,21 @@ public class Board : MonoBehaviour
         passengers = new Passenger[tileCountX, tileCountY];
 
         //the tiles[0, 0] part should be equal to the line before it, like if passengers[0, 3], then afterwards the tiles one should be tiles[0, 3] so that when it spawns, the tile below it has its layer set to "Occupied"
-        passengers[0, 0] = SpawnSinglePiece(PassengerType.Pawn);
-        tiles[0, 0].layer = LayerMask.NameToLayer("Occupied");
+        passengers[1, 0] = SpawnSinglePiece(PassengerType.Pawn);
+        tiles[1, 0].layer = LayerMask.NameToLayer("Occupied");
         passengers[0, 3] = SpawnSinglePiece(PassengerType.Pawn);
         tiles[0, 3].layer = LayerMask.NameToLayer("Occupied");
+        passengers[3, 4] = SpawnSinglePiece(PassengerType.Pawn);
+        tiles[3, 4].layer = LayerMask.NameToLayer("Occupied");
+        passengers[0, 5] = SpawnSinglePiece(PassengerType.Pawn);
+        tiles[0, 5].layer = LayerMask.NameToLayer("Occupied");
     }
 
     private Passenger SpawnSinglePiece(PassengerType type)
     {
-        Passenger passenger = Instantiate(prefabs[(int)type - 1], transform).GetComponent<Passenger>();
-        passenger.transform.localScale = Vector3.one;
+        Passenger passenger = Instantiate(prefabs[(int)type - 1]).GetComponent<Passenger>();
+        //passenger.transform.localScale = Vector3.one;
+        passenger.transform.SetParent(transform);
 
         passenger.type = type;
 
@@ -318,7 +323,7 @@ public class Board : MonoBehaviour
                 if (tiles[x, y] == hitInfo)
                 {
                     return new Vector2Int(x, y);
-                }    
+                }
             }
         }
 
@@ -326,5 +331,4 @@ public class Board : MonoBehaviour
     }
 
     //Possible Debug stuff (Might need to move to GameManager?)
-
 }

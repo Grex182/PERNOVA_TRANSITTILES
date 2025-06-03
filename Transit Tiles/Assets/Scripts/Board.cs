@@ -5,6 +5,13 @@ using UnityEngine;
 
 public class Board : MonoBehaviour
 {
+    private readonly HashSet<Vector2Int> occupiedTilesAtStart = new HashSet<Vector2Int>
+    {
+        new Vector2Int(2, 3),
+        new Vector2Int(4, 4),
+        new Vector2Int(1, 1)
+    };
+
     [Header("Art")]
     [SerializeField] private Material tileMaterial;
     [SerializeField] private float dragOffset = 1.25f;
@@ -72,6 +79,10 @@ public class Board : MonoBehaviour
                 else if (passengers[currentHover.x, currentHover.y] != null)
                 {
                     tiles[currentHover.x, currentHover.y].layer = LayerMask.NameToLayer("Occupied");
+                }
+                else if (tiles[hitPosition.x, hitPosition.y].layer == LayerMask.NameToLayer("Unavailable"))
+                {
+                    tiles[currentHover.x, currentHover.y].layer = LayerMask.NameToLayer("Unavailable");
                 }
                 else
                 {
@@ -164,7 +175,14 @@ public class Board : MonoBehaviour
         {
             for (int y = 0; y < tileCountY; y++)
             {
+                Vector2Int tilePos = new Vector2Int(x, y);
                 tiles[x, y] = GenerateSingleTile(tileSize, x, y);
+
+                if (occupiedTilesAtStart.Contains(tilePos))
+                {
+                    tiles[x, y].layer = LayerMask.NameToLayer("Unavailable");
+                }
+
                 Instantiate(floorTile, new Vector3(GetTileCenter(x, y).x, yOffsetFloorTile, GetTileCenter(x, y).z), Quaternion.Euler(-90, 0, 0));
             }
         }
@@ -261,13 +279,23 @@ public class Board : MonoBehaviour
     {
         for (int i = 0; i < availableMoves.Count; i++)
         {
-            tiles[availableMoves[i].x, availableMoves[i].y].layer = LayerMask.NameToLayer("MovableSpot");
+            if (tiles[availableMoves[i].x, availableMoves[i].y].layer == LayerMask.NameToLayer("Unavailable"))
+            {
+                continue; //Skips the tile that is unavailable and continues with the rest
+            }
+
+                tiles[availableMoves[i].x, availableMoves[i].y].layer = LayerMask.NameToLayer("MovableSpot");
         }
     }
     private void RemoveMovableTiles()
     {
         for (int i = 0; i < availableMoves.Count; i++)
         {
+            if (tiles[availableMoves[i].x, availableMoves[i].y].layer == LayerMask.NameToLayer("Unavailable"))
+            {
+                continue; //Skips the tile that is unavailable and continues with the rest
+            }
+
             tiles[availableMoves[i].x, availableMoves[i].y].layer = LayerMask.NameToLayer("Tile");
         }
 
@@ -291,6 +319,12 @@ public class Board : MonoBehaviour
     private bool MoveTo(Passenger passenger, int x, int y)
     {
         if (!ContainsValidMove(ref availableMoves, new Vector2(x, y)))
+        {
+            return false;
+        }
+
+        //Block movement if the tile's layer is "Unavailable"
+        if (tiles[x, y].layer == LayerMask.NameToLayer("Unavailable"))
         {
             return false;
         }

@@ -5,11 +5,21 @@ using UnityEngine;
 
 public class Board : MonoBehaviour
 {
+    //Spawns unavailable tiles
     private readonly HashSet<Vector2Int> occupiedTilesAtStart = new HashSet<Vector2Int>
     {
-        new Vector2Int(2, 3),
-        new Vector2Int(4, 4),
-        new Vector2Int(1, 1)
+        new Vector2Int(11, 0),  new Vector2Int(11, 1), new Vector2Int(11, 2),  new Vector2Int(11, 3), new Vector2Int(11, 4), new Vector2Int(11, 5),
+        new Vector2Int(10, 0),  new Vector2Int(10, 1), new Vector2Int(10, 2),  new Vector2Int(10, 3), new Vector2Int(10, 4), new Vector2Int(10, 5),
+        new Vector2Int(9, 0),   new Vector2Int(9, 1),  new Vector2Int(9, 2),   new Vector2Int(9, 3),  new Vector2Int(9, 4),  new Vector2Int(9, 5),
+        new Vector2Int(8, 0),   new Vector2Int(8, 1),  new Vector2Int(8, 2),   new Vector2Int(8, 3),  new Vector2Int(8, 4),  new Vector2Int(8, 5),
+        new Vector2Int(7, 0),   new Vector2Int(7, 1),  new Vector2Int(3, 2),   new Vector2Int(3, 3),  new Vector2Int(3, 4),  new Vector2Int(3, 5),
+        new Vector2Int(6, 0),   new Vector2Int(6, 1),  new Vector2Int(2, 2),   new Vector2Int(2, 3),  new Vector2Int(2, 4),  new Vector2Int(2, 5),
+        new Vector2Int(5, 0),   new Vector2Int(5, 1),  new Vector2Int(1, 2),   new Vector2Int(1, 3),  new Vector2Int(1, 4),  new Vector2Int(1, 5),
+        new Vector2Int(4, 0),   new Vector2Int(4, 1),  new Vector2Int(0, 2),   new Vector2Int(0, 3),  new Vector2Int(0, 4),  new Vector2Int(0, 5),
+        new Vector2Int(3, 0),   new Vector2Int(3, 1),
+        new Vector2Int(2, 0),   new Vector2Int(2, 1),
+        new Vector2Int(1, 0),   new Vector2Int(1, 1),
+        new Vector2Int(0, 0),   new Vector2Int(0, 1),
     };
 
     [Header("Art")]
@@ -161,6 +171,26 @@ public class Board : MonoBehaviour
             float distance = 0.0f;
             if (horizontalPlane.Raycast(ray, out distance))
                 currentlyDragging.SetPosition(ray.GetPoint(distance) + Vector3.up * dragOffset);
+
+/*            Plane horizontalPlane = new Plane(Vector3.up, Vector3.up * yOffset);
+            float distance = 0.0f;
+            if (horizontalPlane.Raycast(ray, out distance))
+            {
+                RaycastHit hit;
+                Ray hoverRay = currentCamera.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(hoverRay, out hit, 100, LayerMask.GetMask("MovableSpot")))
+                {
+                    Vector2Int movePos = LookupTileIndex(hit.transform.gameObject);
+
+                    // Snap to center of the valid MovableSpot tile
+                    currentlyDragging.SetPosition(GetTileCenter(movePos.x, movePos.y) + Vector3.up * dragOffset);
+                }
+                else
+                {
+                    // Optionally keep the piece at its original position if not over MovableSpot
+                    currentlyDragging.SetPosition(GetTileCenter(currentlyDragging.currentX, currentlyDragging.currentY) + Vector3.up * dragOffset);
+                }
+            }*/
         }
     }
 
@@ -224,14 +254,14 @@ public class Board : MonoBehaviour
         passengers = new Passenger[tileCountX, tileCountY];
 
         //the tiles[0, 0] part should be equal to the line before it, like if passengers[0, 3], then afterwards the tiles one should be tiles[0, 3] so that when it spawns, the tile below it has its layer set to "Occupied"
-        passengers[1, 0] = SpawnSinglePiece(PassengerType.Pawn);
-        tiles[1, 0].layer = LayerMask.NameToLayer("Occupied");
-        passengers[0, 3] = SpawnSinglePiece(PassengerType.Pawn);
-        tiles[0, 3].layer = LayerMask.NameToLayer("Occupied");
-        passengers[3, 4] = SpawnSinglePiece(PassengerType.Pawn);
-        tiles[3, 4].layer = LayerMask.NameToLayer("Occupied");
-        passengers[0, 5] = SpawnSinglePiece(PassengerType.Pawn);
-        tiles[0, 5].layer = LayerMask.NameToLayer("Occupied");
+        passengers[5, 3] = SpawnSinglePiece(PassengerType.Pawn);
+        tiles[5, 3].layer = LayerMask.NameToLayer("Occupied");
+        passengers[4, 3] = SpawnSinglePiece(PassengerType.Pawn);
+        tiles[4, 3].layer = LayerMask.NameToLayer("Occupied");
+        passengers[5, 4] = SpawnSinglePiece(PassengerType.Pawn);
+        tiles[5, 4].layer = LayerMask.NameToLayer("Occupied");
+        passengers[4, 5] = SpawnSinglePiece(PassengerType.Pawn);
+        tiles[4, 5].layer = LayerMask.NameToLayer("Occupied");
     }
 
     private Passenger SpawnSinglePiece(PassengerType type)

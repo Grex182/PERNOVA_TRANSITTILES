@@ -163,8 +163,8 @@ MonoBehaviour:
   floorTile: {fileID: 3268293465362098123, guid: c93c2e018b16e5c4a920714b39b2ec94, type: 3}
   yOffsetFloorTile: 0.95
   yPositionOffset: 0
-  tileCountX: 8
-  tileCountY: 6
+  tileCountX: 10
+  tileCountY: 12
 --- !u!4 &58632780
 Transform:
   m_ObjectHideFlags: 0

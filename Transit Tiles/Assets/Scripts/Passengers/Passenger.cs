@@ -15,7 +15,6 @@ public enum PassengerType
 
 public class Passenger : MonoBehaviour
 {
-    public int team;
     public int currentX;
     public int currentY;
     public PassengerType type;

@@ -22,14 +22,6 @@ public class Board : MonoBehaviour
         new Vector2Int(0, 0),   new Vector2Int(0, 1),                                                                                               new Vector2Int(0, 6),
     };
 
-    private readonly HashSet<Vector2Int> tagExitTilesAtStart = new HashSet<Vector2Int>
-    {
-        new Vector2Int(6, 5),   new Vector2Int(7, 5),
-        new Vector2Int(6, 4),   new Vector2Int(7, 4),
-        new Vector2Int(6, 3),   new Vector2Int(7, 3),
-        new Vector2Int(6, 2),   new Vector2Int(7, 2),
-    };
-
     //Apply TrainTiles tag on tiles at the start
     private readonly HashSet<Vector2Int> tagTrainTilesAtStart = new HashSet<Vector2Int>
     {
@@ -45,6 +37,22 @@ public class Board : MonoBehaviour
         new Vector2Int(2, 7),   new Vector2Int(2, 8),   new Vector2Int(2, 9),   new Vector2Int(2, 10),  new Vector2Int(2, 11),
         new Vector2Int(1, 7),   new Vector2Int(1, 8),   new Vector2Int(1, 9),   new Vector2Int(1, 10),  new Vector2Int(1, 11),
         new Vector2Int(0, 7),   new Vector2Int(0, 8),   new Vector2Int(0, 9),   new Vector2Int(0, 10),  new Vector2Int(0, 11),
+    };
+
+    private readonly HashSet<Vector2Int> tagExitTilesAtStart = new HashSet<Vector2Int>
+    {
+        new Vector2Int(6, 5),   new Vector2Int(7, 5),
+        new Vector2Int(6, 4),   new Vector2Int(7, 4),
+        new Vector2Int(6, 3),   new Vector2Int(7, 3),
+        new Vector2Int(6, 2),   new Vector2Int(7, 2),
+    };
+
+    private readonly HashSet<Vector2Int> tagEntranceTilesAtStart = new HashSet<Vector2Int>
+    {
+        new Vector2Int(5, 5),   new Vector2Int(4, 5),
+        new Vector2Int(5, 4),   new Vector2Int(4, 4),
+        new Vector2Int(5, 3),   new Vector2Int(4, 3),
+        new Vector2Int(5, 2),   new Vector2Int(4, 2),
     };
 
     [Header("Art")]
@@ -64,6 +72,7 @@ public class Board : MonoBehaviour
     [SerializeField] private float yPositionOffset;
 
     private Passenger[,] passengers;
+    [SerializeField] private List<GameObject> platformTiles = new List<GameObject>();
     private Passenger currentlyDragging;
     private List<Vector2Int> availableMoves = new List<Vector2Int>();
     [SerializeField] private int tileCountX = 8;
@@ -75,6 +84,8 @@ public class Board : MonoBehaviour
 
     private void Awake()
     {
+        StationManager.instance.Board = this;
+
         GenerateAllTiles(tileSize, tileCountX, tileCountY);
 
         SpawnAllPieces();
@@ -245,6 +256,12 @@ public class Board : MonoBehaviour
                 else if (tagExitTilesAtStart.Contains(tilePos))
                 {
                     tiles[x, y].tag = "ExitTile";
+                    platformTiles.Add(tiles[x, y]);
+                }
+                else if (tagEntranceTilesAtStart.Contains(tilePos))
+                {
+                    tiles[x, y].tag = "EntranceTile";
+                    platformTiles.Add(tiles[x, y]);
                 }
 
                 Instantiate(floorTile, new Vector3(GetTileCenter(x, y).x, yOffsetFloorTile, GetTileCenter(x, y).z), Quaternion.Euler(-90, 0, 0));
@@ -411,6 +428,22 @@ public class Board : MonoBehaviour
         PositionSinglePiece(x, y);
 
         return true;
+    }
+
+    public void DisablePlatformTiles()
+    {
+        foreach (var tile in platformTiles)
+        {
+            tile.layer = LayerMask.NameToLayer("Unavailable");
+        }
+    }
+
+    public void EnablePlatformTiles()
+    {
+        foreach (var tile in platformTiles)
+        {
+            tile.layer = LayerMask.NameToLayer("Tile");
+        }
     }
 
     private Vector2Int LookupTileIndex(GameObject hitInfo)

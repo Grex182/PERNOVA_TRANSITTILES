@@ -163,6 +163,7 @@ MonoBehaviour:
   floorTile: {fileID: 3268293465362098123, guid: c93c2e018b16e5c4a920714b39b2ec94, type: 3}
   yOffsetFloorTile: 0.95
   yPositionOffset: 0
+  platformTiles: []
   tileCountX: 12
   tileCountY: 11
 --- !u!4 &58632780
@@ -224,7 +225,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4302f890c45e9e544a7f655dbb3d76f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _board: {fileID: 0}
   stationColor: 0
+  stationTime: 8
+  travelTime: 10
+  isTrainMoving: 0
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0

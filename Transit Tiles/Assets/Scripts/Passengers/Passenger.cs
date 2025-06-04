@@ -20,6 +20,7 @@ public class Passenger : MonoBehaviour
     public PassengerType type;
 
     private const string ColorProperty = "_BaseColor";
+    private string randomColor;
 
     private Vector3 desiredPosition;
     //[SerializeField] private Vector3 desiredScale = Vector3.one;
@@ -28,7 +29,7 @@ public class Passenger : MonoBehaviour
 
     private void Start()
     {
-        string randomColor = validStationColors[Random.Range(0, validStationColors.Length)];
+        randomColor = validStationColors[Random.Range(0, validStationColors.Length)];
 
         Debug.Log("Random Color: " + randomColor);
 
@@ -74,7 +75,7 @@ public class Passenger : MonoBehaviour
         }
         else if (other.CompareTag("ExitTile") && isInsideTrain)
         {
-            StationManager.instance.SendMessageTest();
+            StationManager.instance.CheckPassengerStation();
             isInsideTrain = false;
 
             Debug.Log("Passenger exited train.");

@@ -20,9 +20,9 @@ public class Passenger : MonoBehaviour
     public PassengerType type;
 
     private Vector3 desiredPosition;
-    [SerializeField] private Vector3 desiredScale = Vector3.one;
+    //[SerializeField] private Vector3 desiredScale = Vector3.one;
 
-    private bool hasEnteredTrain = false;
+    private bool isInsideTrain = false;
 
     private void Update()
     {
@@ -55,10 +55,18 @@ public class Passenger : MonoBehaviour
 
     public virtual void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("TrainTile") && !hasEnteredTrain)
+        if (other.CompareTag("TrainTile") && !isInsideTrain)
         {
+            isInsideTrain = true;
+
             Debug.Log("Passenger entered train.");
-            hasEnteredTrain = true;
+        }
+        else if (other.CompareTag("ExitTile") && isInsideTrain)
+        {
+
+            isInsideTrain = false;
+
+            Debug.Log("Passenger exited train.");
         }
     }
 

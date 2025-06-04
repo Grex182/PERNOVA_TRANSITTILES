@@ -164,7 +164,7 @@ MonoBehaviour:
   yOffsetFloorTile: 0.95
   yPositionOffset: 0
   tileCountX: 12
-  tileCountY: 10
+  tileCountY: 11
 --- !u!4 &58632780
 Transform:
   m_ObjectHideFlags: 0

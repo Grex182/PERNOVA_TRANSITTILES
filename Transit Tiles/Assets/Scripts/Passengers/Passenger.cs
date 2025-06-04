@@ -63,7 +63,7 @@ public class Passenger : MonoBehaviour
         }
         else if (other.CompareTag("ExitTile") && isInsideTrain)
         {
-
+            StationManager.instance.SendMessageTest();
             isInsideTrain = false;
 
             Debug.Log("Passenger exited train.");

@@ -22,6 +22,8 @@ public class Passenger : MonoBehaviour
     private Vector3 desiredPosition;
     [SerializeField] private Vector3 desiredScale = Vector3.one;
 
+    private bool hasEnteredTrain = false;
+
     private void Update()
     {
         transform.position = Vector3.Lerp(transform.position, desiredPosition, Time.deltaTime * 10);
@@ -51,13 +53,22 @@ public class Passenger : MonoBehaviour
         }
     }
 
-/*    public virtual void SetScale(Vector3 scale, bool force = false)
+    public virtual void OnTriggerEnter(Collider other)
     {
-        desiredScale = scale;
-
-        if (force)
+        if (other.CompareTag("TrainTile") && !hasEnteredTrain)
         {
-            transform.localScale = desiredScale;
+            Debug.Log("Passenger entered train.");
+            hasEnteredTrain = true;
         }
-    }*/
+    }
+
+    /*    public virtual void SetScale(Vector3 scale, bool force = false)
+        {
+            desiredScale = scale;
+
+            if (force)
+            {
+                transform.localScale = desiredScale;
+            }
+        }*/
 }

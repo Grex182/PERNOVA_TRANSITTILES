@@ -22,6 +22,23 @@ public class Board : MonoBehaviour
         new Vector2Int(0, 0),   new Vector2Int(0, 1),                                                                                               new Vector2Int(0, 6),
     };
 
+    //Apply TrainTiles tag on tiles at the start
+    private readonly HashSet<Vector2Int> tagTrainTilesAtStart = new HashSet<Vector2Int>
+    {
+        new Vector2Int(11, 7),
+        new Vector2Int(10, 7),
+        new Vector2Int(9, 7),
+        new Vector2Int(8, 7),
+        new Vector2Int(7, 7),
+        new Vector2Int(6, 7),
+        new Vector2Int(5, 7),
+        new Vector2Int(4, 7),
+        new Vector2Int(3, 7),
+        new Vector2Int(2, 7),
+        new Vector2Int(1, 7),
+        new Vector2Int(0, 7),
+    };
+
     [Header("Art")]
     [SerializeField] private Material tileMaterial;
     [SerializeField] private float dragOffset = 1.25f;
@@ -213,6 +230,11 @@ public class Board : MonoBehaviour
                     tiles[x, y].layer = LayerMask.NameToLayer("Unavailable");
                 }
 
+                if (tagTrainTilesAtStart.Contains(tilePos))
+                {
+                    tiles[x, y].tag = "TrainTile";
+                }
+
                 Instantiate(floorTile, new Vector3(GetTileCenter(x, y).x, yOffsetFloorTile, GetTileCenter(x, y).z), Quaternion.Euler(-90, 0, 0));
             }
         }
@@ -243,7 +265,8 @@ public class Board : MonoBehaviour
         mesh.RecalculateNormals();
 
         tileObject.layer = LayerMask.NameToLayer("Tile");
-        tileObject.AddComponent<BoxCollider>();
+        BoxCollider boxCollider = tileObject.AddComponent<BoxCollider>();
+        boxCollider.isTrigger = true;
 
         return tileObject;
     }

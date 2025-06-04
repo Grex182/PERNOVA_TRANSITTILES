@@ -122,7 +122,6 @@ MonoBehaviour:
   currentX: 0
   currentY: 0
   type: 0
-  desiredScale: {x: 0.8, y: 0.8, z: 0.8}
 --- !u!136 &5566235340694655393
 CapsuleCollider:
   m_ObjectHideFlags: 0

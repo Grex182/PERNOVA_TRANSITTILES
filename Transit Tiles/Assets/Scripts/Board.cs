@@ -289,13 +289,13 @@ public class Board : MonoBehaviour
         passengers = new Passenger[tileCountX, tileCountY];
 
         //the tiles[0, 0] part should be equal to the line before it, like if passengers[0, 3], then afterwards the tiles one should be tiles[0, 3] so that when it spawns, the tile below it has its layer set to "Occupied"
-        passengers[5, 3] = SpawnSinglePiece(PassengerType.Pawn);
+        passengers[5, 3] = SpawnSinglePiece(PassengerType.Standard);
         tiles[5, 3].layer = LayerMask.NameToLayer("Occupied");
-        passengers[4, 3] = SpawnSinglePiece(PassengerType.Pawn);
+        passengers[4, 3] = SpawnSinglePiece(PassengerType.Standard);
         tiles[4, 3].layer = LayerMask.NameToLayer("Occupied");
-        passengers[5, 4] = SpawnSinglePiece(PassengerType.Pawn);
+        passengers[5, 4] = SpawnSinglePiece(PassengerType.Standard);
         tiles[5, 4].layer = LayerMask.NameToLayer("Occupied");
-        passengers[4, 5] = SpawnSinglePiece(PassengerType.Pawn);
+        passengers[4, 5] = SpawnSinglePiece(PassengerType.Standard);
         tiles[4, 5].layer = LayerMask.NameToLayer("Occupied");
     }
 

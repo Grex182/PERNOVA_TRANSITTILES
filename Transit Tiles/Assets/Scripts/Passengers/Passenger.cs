@@ -5,8 +5,8 @@ using UnityEngine;
 public enum PassengerType
 {
     None = 0,
-    Pawn = 1,
-    Rook = 2,
+    Standard = 1,
+    Elder = 2,
     Knight = 3,
     Bishop = 4,
     Queen = 5,
@@ -19,10 +19,21 @@ public class Passenger : MonoBehaviour
     public int currentY;
     public PassengerType type;
 
+    private const string ColorProperty = "_BaseColor";
+
     private Vector3 desiredPosition;
     //[SerializeField] private Vector3 desiredScale = Vector3.one;
 
     private bool isInsideTrain = false;
+
+    private void Start()
+    {
+        string randomColor = validStationColors[Random.Range(0, validStationColors.Length)];
+
+        Debug.Log("Random Color: " + randomColor);
+
+        SetPassengerStation(gameObject, randomColor);
+    }
 
     private void Update()
     {
@@ -70,13 +81,48 @@ public class Passenger : MonoBehaviour
         }
     }
 
-    /*    public virtual void SetScale(Vector3 scale, bool force = false)
+    private bool SetPassengerStation(GameObject passenger, string stationColor)
+    {
+        //could be changed to enum instead, but for now, its by gameObject name
+        if (gameObject.name.Contains("Girl"))
         {
-            desiredScale = scale;
+            Transform childTransform = passenger.transform.Find("Torso");
 
-            if (force)
-            {
-                transform.localScale = desiredScale;
-            }
-        }*/
+            MeshRenderer childMeshRenderer = childTransform.GetComponent<MeshRenderer>();
+
+            var material = childMeshRenderer.material;
+            material.SetColor(ColorProperty, GetStationColor(stationColor));
+            return true;
+        }
+
+        #region NULL-CHECKS
+        if (!passenger.TryGetComponent<MeshRenderer>(out var meshRenderer))
+        {
+            Debug.LogError("No MeshRenderer found on passenger prefab.");
+            return false;
+        }
+        #endregion
+
+        return true;
+    }
+
+    private static readonly string[] validStationColors = new string[]
+    {
+        "Pink", "Red", "Orange", "Yellow", "Green", "Blue", "Violet"
+    };
+
+    private Color GetStationColor(string stationColor)
+    {
+        switch (stationColor)
+        {
+            case "Pink": return Color.magenta;
+            case "Red": return Color.red;
+            case "Orange": return new Color(1f, 0.5f, 0f);
+            case "Yellow": return Color.yellow;
+            case "Green": return Color.green;
+            case "Blue": return Color.blue;
+            case "Violet": return new Color(0.5f, 0f, 1f);
+            default: return Color.white;
+        }
+    }
 }

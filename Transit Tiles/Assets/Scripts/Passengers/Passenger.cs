@@ -20,7 +20,7 @@ public class Passenger : MonoBehaviour
     public PassengerType type;
 
     private const string ColorProperty = "_BaseColor";
-    private string randomColor;
+    public StationColor assignedColor;
 
     private Vector3 desiredPosition;
     //[SerializeField] private Vector3 desiredScale = Vector3.one;
@@ -29,11 +29,9 @@ public class Passenger : MonoBehaviour
 
     private void Start()
     {
-        randomColor = validStationColors[Random.Range(0, validStationColors.Length)];
-
-        Debug.Log("Random Color: " + randomColor);
-
-        SetPassengerStation(gameObject, randomColor);
+        assignedColor = (StationColor)Random.Range(0, System.Enum.GetValues(typeof(StationColor)).Length);
+        Debug.Log("Assigned Color: " + assignedColor);
+        SetPassengerStation(gameObject, assignedColor.ToString());
     }
 
     private void Update()
@@ -67,18 +65,25 @@ public class Passenger : MonoBehaviour
 
     public virtual void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("TrainTile") && !isInsideTrain)
+        if (other.CompareTag("TrainTile") && !isInsideTrain && !StationManager.instance.isTrainMoving)
         {
             isInsideTrain = true;
 
             Debug.Log("Passenger entered train.");
         }
-        else if (other.CompareTag("ExitTile") && isInsideTrain)
+        else if (other.CompareTag("ExitTile") && isInsideTrain && !StationManager.instance.isTrainMoving)
         {
-            StationManager.instance.CheckPassengerStation();
-            isInsideTrain = false;
+            if (assignedColor == StationManager.instance.stationColor)
+            {
+                Debug.Log("YOU GOT A POINT");
+            }
+            else
+            {
+                Debug.Log("Welp, you just made someone mad ig");
+            }
 
-            Debug.Log("Passenger exited train.");
+            isInsideTrain = false;
+            Destroy(gameObject);
         }
     }
 

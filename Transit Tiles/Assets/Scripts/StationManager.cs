@@ -4,13 +4,13 @@ using UnityEngine;
 
 public enum StationColor
 {
-    RED,
-    PINK,
-    ORANGE,
-    YELLOW,
-    GREEN,
-    BLUE,
-    VIOLET
+    Red,
+    Pink,
+    Orange,
+    Yellow,
+    Green,
+    Blue,
+    Violet
 }
 
 public class StationManager : Singleton<StationManager>
@@ -29,6 +29,8 @@ public class StationManager : Singleton<StationManager>
     [Header("Booleans")]
     [SerializeField] public bool isTrainMoving = false;
 
+    private int currentStationIndex = 0;
+    private int direction = 1; // 1 = forward, -1 = backward
     public static StationManager instance;
 
     private void Awake()
@@ -38,7 +40,7 @@ public class StationManager : Singleton<StationManager>
 
     private void Start()
     {
-        stationColor = StationColor.RED;
+        stationColor = StationColor.Red;
 
         StartCoroutine(StationTimer());
     }
@@ -62,11 +64,34 @@ public class StationManager : Singleton<StationManager>
         isTrainMoving = false;
         Debug.Log("Train has stopped");
 
+        UpdateStationColor();
+
         StartCoroutine(StationTimer());
     }
 
-    public void CheckPassengerStation()
+    private void UpdateStationColor()
     {
+        // Get total number of station colors
+        int totalStations = System.Enum.GetValues(typeof(StationColor)).Length;
 
+        // Update index
+        currentStationIndex += direction;
+
+        // If we hit the bounds, reverse direction
+        if (currentStationIndex >= totalStations)
+        {
+            currentStationIndex = totalStations - 2; // go one step before last
+            direction = -1;
+        }
+        else if (currentStationIndex < 0)
+        {
+            currentStationIndex = 1; // go one step after first
+            direction = 1;
+        }
+
+        // Set new station color
+        stationColor = (StationColor)currentStationIndex;
+
+        Debug.Log("The Train has arrived at: " + stationColor + "Station.");
     }
 }

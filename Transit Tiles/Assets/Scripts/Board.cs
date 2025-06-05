@@ -84,14 +84,18 @@ public class Board : MonoBehaviour
 
     private void Awake()
     {
-        StationManager.instance.Board = this;
-
         GenerateAllTiles(tileSize, tileCountX, tileCountY);
 
         SpawnAllPieces();
 
         PositionAllPieces();
     }
+
+    private void Start()
+    {
+        StationManager.instance.Board = this;
+    }
+
     private void Update()
     {
         //For putting in the highlighting part of the board
@@ -169,6 +173,11 @@ public class Board : MonoBehaviour
                 RemoveMovableTiles();
 
                 tiles[currentlyDragging.currentX, currentlyDragging.currentY].layer = LayerMask.NameToLayer("Occupied");
+
+                if (currentlyDragging.type == PassengerType.Bulky)
+                {
+                    tiles[currentlyDragging.currentX - 1, currentlyDragging.currentY].layer = LayerMask.NameToLayer("Occupied");
+                }
 
                 currentlyDragging = null;
             }
@@ -314,6 +323,9 @@ public class Board : MonoBehaviour
         tiles[5, 4].layer = LayerMask.NameToLayer("Occupied");
         passengers[4, 5] = SpawnSinglePiece(PassengerType.Standard);
         tiles[4, 5].layer = LayerMask.NameToLayer("Occupied");
+        passengers[5, 2] = SpawnSinglePiece(PassengerType.Bulky);
+        tiles[5, 2].layer = LayerMask.NameToLayer("Occupied");
+        tiles[4, 2].layer = LayerMask.NameToLayer("Occupied");
     }
 
     private Passenger SpawnSinglePiece(PassengerType type)
@@ -406,7 +418,7 @@ public class Board : MonoBehaviour
         }
 
         //Block movement if the tile's layer is "Unavailable"
-        if (tiles[x, y].layer == LayerMask.NameToLayer("Unavailable"))
+        if (tiles[x, y].layer == LayerMask.NameToLayer("Unavailable") || tiles[x, y].layer == LayerMask.NameToLayer("Occupied"))
         {
             return false;
         }

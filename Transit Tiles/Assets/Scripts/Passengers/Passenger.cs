@@ -7,7 +7,7 @@ public enum PassengerType
     None = 0,
     Standard = 1,
     Elder = 2,
-    Knight = 3,
+    Bulky = 3,
     Bishop = 4,
     Queen = 5,
     King = 6
@@ -42,15 +42,75 @@ public class Passenger : MonoBehaviour
 
     public virtual List<Vector2Int> GetAvailableMoves(ref Passenger[,] board, int tileCountX, int tileCountY)
     {
-        //r means return value
         List<Vector2Int> r = new List<Vector2Int>();
 
-        r.Add(new Vector2Int(3, 3));
-        r.Add(new Vector2Int(3, 4));
-        r.Add(new Vector2Int(4, 3));
-        r.Add(new Vector2Int(4, 4));
+        //Down
+        for (int i = currentY - 1; i >= 0; i--)
+        {
+            if (board[currentX, i] == null)
+            {
+                r.Add(new Vector2Int(currentX, i));
+            }
+
+            if (board[currentX, i] != null)
+            {
+                break;
+            }
+        }
+
+        //Up
+        for (int i = currentY + 1; i < tileCountY; i++)
+        {
+            if (board[currentX, i] == null)
+            {
+                r.Add(new Vector2Int(currentX, i));
+            }
+
+            if (board[currentX, i] != null)
+            {
+                break;
+            }
+        }
+
+        //Left
+        for (int i = currentX - 1; i >= 0; i--)
+        {
+            if (board[i, currentY] == null)
+            {
+                r.Add(new Vector2Int(i, currentY));
+            }
+
+            if (board[i, currentY] != null)
+            {
+                break;
+            }
+        }
+
+        //Right
+        for (int i = currentX + 1; i < tileCountX; i++)
+        {
+            if (board[i, currentY] == null)
+            {
+                r.Add(new Vector2Int(i, currentY));
+            }
+
+            if (board[i, currentY] != null)
+            {
+                break;
+            }
+        }
 
         return r;
+
+        /*        //r means return value
+                List<Vector2Int> r = new List<Vector2Int>();
+
+                r.Add(new Vector2Int(3, 3));
+                r.Add(new Vector2Int(3, 4));
+                r.Add(new Vector2Int(4, 3));
+                r.Add(new Vector2Int(4, 4));
+
+                return r;*/
     }
 
     public virtual void SetPosition(Vector3 position, bool force = false)

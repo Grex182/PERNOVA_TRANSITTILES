@@ -160,6 +160,8 @@ MonoBehaviour:
   boardCenter: {x: 0, y: 0, z: 0}
   prefabs:
   - {fileID: 8510696671202182726, guid: a0608beceafacb54e8c898a74910bfd4, type: 3}
+  - {fileID: 8569515437451751323, guid: 9a6357dbac858a647b4c979d919ba37e, type: 3}
+  - {fileID: 8569515437451751323, guid: 9a6357dbac858a647b4c979d919ba37e, type: 3}
   floorTile: {fileID: 3268293465362098123, guid: c93c2e018b16e5c4a920714b39b2ec94, type: 3}
   yOffsetFloorTile: 0.95
   yPositionOffset: 0
@@ -762,10 +764,10 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 269469376}
+  - {fileID: 1077491987}
   - {fileID: 963194228}
   - {fileID: 755922847}
   - {fileID: 705507995}
   - {fileID: 2037671946}
   - {fileID: 58632780}
-  - {fileID: 1077491987}
-  - {fileID: 269469376}

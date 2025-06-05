@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2946919753471957014}
   - component: {fileID: 1530715298356668247}
   - component: {fileID: 3373204192915111219}
-  - component: {fileID: 955067566922825348}
+  - component: {fileID: 7307527575160160914}
   m_Layer: 0
   m_Name: NormalPassenger
   m_TagString: Untagged
@@ -108,7 +108,7 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &955067566922825348
+--- !u!114 &7307527575160160914
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -117,10 +117,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8569515437451751323}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b48ece9a1cf3d3143a82e1fb1c6a0073, type: 3}
+  m_Script: {fileID: 11500000, guid: 712d1f1de1f0ce140884daf74aae893f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: 0
   currentX: 0
   currentY: 0
-  type: 0
+  type: 3
+  assignedColor: 0

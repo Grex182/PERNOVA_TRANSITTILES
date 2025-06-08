@@ -116,7 +116,15 @@ public class Board : MonoBehaviour
             if (currentHover == -Vector2Int.one)
             {
                 currentHover = hitPosition;
-                tiles[hitPosition.x, hitPosition.y].layer = LayerMask.NameToLayer("Hover");
+
+                if (tiles[hitPosition.x, hitPosition.y].layer == LayerMask.NameToLayer("Occupied") && currentlyDragging != null/* && passengers[currentHover.x, currentHover.y] == null*//* && passengers[currentHover.x, currentHover.y] == null*/) //uncomment the && part if tile under passenger should turn green and not stay red
+                {
+                    tiles[hitPosition.x, hitPosition.y].layer = LayerMask.NameToLayer("Occupied");
+                }
+                else
+                {
+                    tiles[hitPosition.x, hitPosition.y].layer = LayerMask.NameToLayer("Hover");
+                }
             }
 
             //If already hovering tile, change previous one
@@ -126,7 +134,7 @@ public class Board : MonoBehaviour
                 {
                     tiles[currentHover.x, currentHover.y].layer = LayerMask.NameToLayer("MovableSpot");
                 }
-                else if (passengers[currentHover.x, currentHover.y] != null)
+                else if (passengers[currentHover.x, currentHover.y] != null || tiles[currentHover.x, currentHover.y].layer == LayerMask.NameToLayer("Occupied"))
                 {
                     tiles[currentHover.x, currentHover.y].layer = LayerMask.NameToLayer("Occupied");
                 }
@@ -138,8 +146,17 @@ public class Board : MonoBehaviour
                 {
                     tiles[currentHover.x, currentHover.y].layer = LayerMask.NameToLayer("Tile");
                 }
+
                 currentHover = hitPosition;
-                tiles[hitPosition.x, hitPosition.y].layer = LayerMask.NameToLayer("Hover");
+
+                if (tiles[hitPosition.x, hitPosition.y].layer == LayerMask.NameToLayer("Occupied") && currentlyDragging != null/* && passengers[currentHover.x, currentHover.y] == null*//* && passengers[currentHover.x, currentHover.y] == null*/) //uncomment the && part if tile under passenger should turn green and not stay red
+                {
+                    tiles[hitPosition.x, hitPosition.y].layer = LayerMask.NameToLayer("Occupied");
+                }
+                else
+                {
+                    tiles[hitPosition.x, hitPosition.y].layer = LayerMask.NameToLayer("Hover");
+                }
             }
 
             //If press down on mouse
@@ -172,7 +189,7 @@ public class Board : MonoBehaviour
 
                 RemoveMovableTiles();
 
-                tiles[currentlyDragging.currentX, currentlyDragging.currentY].layer = LayerMask.NameToLayer("Occupied");
+                tiles[currentlyDragging.currentX, currentlyDragging.currentY].layer = LayerMask.NameToLayer("Hover");
 
                 if (currentlyDragging.type == PassengerType.Bulky)
                 {

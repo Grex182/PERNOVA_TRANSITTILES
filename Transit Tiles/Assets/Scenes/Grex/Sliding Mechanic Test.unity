@@ -159,12 +159,12 @@ MonoBehaviour:
   yOffset: 1
   boardCenter: {x: 0, y: 0, z: 0}
   prefabs:
-  - {fileID: 8569515437451751323, guid: 9a6357dbac858a647b4c979d919ba37e, type: 3}
-  floorTile: {fileID: 2294588425832063719, guid: 36a841191c3aecc4aad78b2668e7d960, type: 3}
+  - {fileID: 8510696671202182726, guid: a0608beceafacb54e8c898a74910bfd4, type: 3}
+  floorTile: {fileID: 3268293465362098123, guid: c93c2e018b16e5c4a920714b39b2ec94, type: 3}
   yOffsetFloorTile: 0.95
-  yPositionOffset: 1
-  tileCountX: 8
-  tileCountY: 6
+  yPositionOffset: 0
+  tileCountX: 10
+  tileCountY: 12
 --- !u!4 &58632780
 Transform:
   m_ObjectHideFlags: 0

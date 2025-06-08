@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Occupied
+  - TrainTile
+  - ExitTile
+  - EntranceTile
   layers:
   - Default
   - TransparentFX
@@ -16,8 +19,8 @@ TagManager:
   - Hover
   - MovableSpot
   - Occupied
-  - 
-  - 
+  - Unavailable
+  - Passenger
   - 
   - 
   - 

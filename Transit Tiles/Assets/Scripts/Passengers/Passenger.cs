@@ -5,9 +5,9 @@ using UnityEngine;
 public enum PassengerType
 {
     None = 0,
-    Pawn = 1,
-    Rook = 2,
-    Knight = 3,
+    Standard = 1,
+    Elder = 2,
+    Bulky = 3,
     Bishop = 4,
     Queen = 5,
     King = 6
@@ -15,31 +15,102 @@ public enum PassengerType
 
 public class Passenger : MonoBehaviour
 {
-    public int team;
     public int currentX;
     public int currentY;
     public PassengerType type;
 
+    private const string ColorProperty = "_BaseColor";
+    public StationColor assignedColor;
+
     private Vector3 desiredPosition;
-    private Vector3 desiredScale = Vector3.one;
+    //[SerializeField] private Vector3 desiredScale = Vector3.one;
+
+    private bool isInsideTrain = false;
+
+    private void Start()
+    {
+        assignedColor = (StationColor)Random.Range(0, System.Enum.GetValues(typeof(StationColor)).Length);
+        Debug.Log("Assigned Color: " + assignedColor);
+        SetPassengerStation(gameObject, assignedColor.ToString());
+    }
 
     private void Update()
     {
         transform.position = Vector3.Lerp(transform.position, desiredPosition, Time.deltaTime * 10);
-        transform.localScale = Vector3.Lerp(transform.localScale, desiredScale, Time.deltaTime * 10);
+        //transform.localScale = Vector3.Lerp(transform.localScale, desiredScale, Time.deltaTime * 10);
     }
 
     public virtual List<Vector2Int> GetAvailableMoves(ref Passenger[,] board, int tileCountX, int tileCountY)
     {
-        //r means return value
         List<Vector2Int> r = new List<Vector2Int>();
 
-        r.Add(new Vector2Int(3, 3));
-        r.Add(new Vector2Int(3, 4));
-        r.Add(new Vector2Int(4, 3));
-        r.Add(new Vector2Int(4, 4));
+        //Down
+        for (int i = currentY - 1; i >= 0; i--)
+        {
+            if (board[currentX, i] == null)
+            {
+                r.Add(new Vector2Int(currentX, i));
+            }
+
+            if (board[currentX, i] != null)
+            {
+                break;
+            }
+        }
+
+        //Up
+        for (int i = currentY + 1; i < tileCountY; i++)
+        {
+            if (board[currentX, i] == null)
+            {
+                r.Add(new Vector2Int(currentX, i));
+            }
+
+            if (board[currentX, i] != null)
+            {
+                break;
+            }
+        }
+
+        //Left
+        for (int i = currentX - 1; i >= 0; i--)
+        {
+            if (board[i, currentY] == null)
+            {
+                r.Add(new Vector2Int(i, currentY));
+            }
+
+            if (board[i, currentY] != null)
+            {
+                break;
+            }
+        }
+
+        //Right
+        for (int i = currentX + 1; i < tileCountX; i++)
+        {
+            if (board[i, currentY] == null)
+            {
+                r.Add(new Vector2Int(i, currentY));
+            }
+
+            if (board[i, currentY] != null)
+            {
+                break;
+            }
+        }
 
         return r;
+
+        /*        //r means return value
+                List<Vector2Int> r = new List<Vector2Int>();
+
+                r.Add(new Vector2Int(3, 3));
+                r.Add(new Vector2Int(3, 4));
+                r.Add(new Vector2Int(4, 3));
+                r.Add(new Vector2Int(4, 4));
+
+                return r;*/
     }
 
     public virtual void SetPosition(Vector3 position, bool force = false)
@@ -52,13 +123,72 @@ public class Passenger : MonoBehaviour
         }
     }
 
-    public virtual void SetScale(Vector3 scale, bool force = false)
+    public virtual void OnTriggerEnter(Collider other)
     {
-        desiredScale = scale;
-
-        if (force)
+        if (other.CompareTag("TrainTile") && !isInsideTrain && !StationManager.instance.isTrainMoving)
         {
-            transform.localScale = desiredScale;
+            isInsideTrain = true;
+
+            Debug.Log("Passenger entered train.");
+        }
+        else if (other.CompareTag("ExitTile") && isInsideTrain && !StationManager.instance.isTrainMoving)
+        {
+            if (assignedColor == StationManager.instance.stationColor)
+            {
+                Debug.Log("YOU GOT A POINT");
+            }
+            else
+            {
+                Debug.Log("Welp, you just made someone mad ig");
+            }
+
+            isInsideTrain = false;
+            Destroy(gameObject);
+        }
+    }
+
+    private bool SetPassengerStation(GameObject passenger, string stationColor)
+    {
+        //could be changed to enum instead, but for now, its by gameObject name
+        if (gameObject.name.Contains("Girl"))
+        {
+            Transform childTransform = passenger.transform.Find("Torso");
+
+            MeshRenderer childMeshRenderer = childTransform.GetComponent<MeshRenderer>();
+
+            var material = childMeshRenderer.material;
+            material.SetColor(ColorProperty, GetStationColor(stationColor));
+            return true;
+        }
+
+        #region NULL-CHECKS
+        if (!passenger.TryGetComponent<MeshRenderer>(out var meshRenderer))
+        {
+            Debug.LogError("No MeshRenderer found on passenger prefab.");
+            return false;
+        }
+        #endregion
+
+        return true;
+    }
+
+    private static readonly string[] validStationColors = new string[]
+    {
+        "Pink", "Red", "Orange", "Yellow", "Green", "Blue", "Violet"
+    };
+
+    private Color GetStationColor(string stationColor)
+    {
+        switch (stationColor)
+        {
+            case "Pink": return Color.magenta;
+            case "Red": return Color.red;
+            case "Orange": return new Color(1f, 0.5f, 0f);
+            case "Yellow": return Color.yellow;
+            case "Green": return Color.green;
+            case "Blue": return Color.blue;
+            case "Violet": return new Color(0.5f, 0f, 1f);
+            default: return Color.white;
         }
     }
 }

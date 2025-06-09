@@ -193,20 +193,38 @@ public class Board : MonoBehaviour
 
                 bool validMove = MoveTo(currentlyDragging, hitPosition.x, hitPosition.y);
 
+/*                if (currentlyDragging.type == PassengerType.Bulky)
+                {
+                    tiles[previousPosition.x - 1, previousPosition.y].layer = LayerMask.NameToLayer("Tile");
+
+                    if (currentlyDragging.currentX - 1 >= 0 && currentlyDragging.currentX - 1 < tiles.GetLength(0) && currentlyDragging.currentY >= 0 && currentlyDragging.currentY < tiles.GetLength(1))
+                    {
+                        tiles[currentlyDragging.currentX - 1, currentlyDragging.currentY].layer = LayerMask.NameToLayer("Occupied");
+                    }
+                    else
+                    {
+                        validMove = false;
+                    }
+                }*/
+
                 //go back to previous position
                 if (!validMove)
                 {
+/*                    if (currentlyDragging.type == PassengerType.Bulky)
+                    {
+                        currentlyDragging.SetPosition(GetTileCenter(previousPosition.x, previousPosition.y));
+                        tiles[previousPosition.x, previousPosition.y].layer = LayerMask.NameToLayer("Occupied");
+                        tiles[previousPosition.x - 1, previousPosition.y].layer = LayerMask.NameToLayer("Occupied");
+                        tiles[currentlyDragging.currentX, currentlyDragging.currentY].layer = LayerMask.NameToLayer("Tile");
+                        Debug.Log("Changed the position of bulky person back to previous position");
+                    }*/
+
                     currentlyDragging.SetPosition(GetTileCenter(previousPosition.x, previousPosition.y));
                 }
 
                 RemoveMovableTiles();
 
                 tiles[currentlyDragging.currentX, currentlyDragging.currentY].layer = LayerMask.NameToLayer("Hover");
-
-                if (currentlyDragging.type == PassengerType.Bulky)
-                {
-                    tiles[currentlyDragging.currentX - 1, currentlyDragging.currentY].layer = LayerMask.NameToLayer("Occupied");
-                }
 
                 currentlyDragging = null;
             }

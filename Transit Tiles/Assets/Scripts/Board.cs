@@ -121,6 +121,10 @@ public class Board : MonoBehaviour
                 {
                     tiles[hitPosition.x, hitPosition.y].layer = LayerMask.NameToLayer("Occupied");
                 }
+                else if (tiles[hitPosition.x, hitPosition.y].layer == LayerMask.NameToLayer("Occupied") && passengers[hitPosition.x, hitPosition.y] == null)
+                {
+                    tiles[hitPosition.x, hitPosition.y].layer = LayerMask.NameToLayer("Occupied");
+                }
                 else
                 {
                     tiles[hitPosition.x, hitPosition.y].layer = LayerMask.NameToLayer("Hover");
@@ -138,6 +142,10 @@ public class Board : MonoBehaviour
                 {
                     tiles[currentHover.x, currentHover.y].layer = LayerMask.NameToLayer("Occupied");
                 }
+                else if (tiles[currentHover.x, currentHover.y].layer == LayerMask.NameToLayer("Occupied") && passengers[currentHover.x, currentHover.y] == null)
+                {
+                    tiles[currentHover.x, currentHover.y].layer = LayerMask.NameToLayer("Occupied");
+                }
                 else if (tiles[hitPosition.x, hitPosition.y].layer == LayerMask.NameToLayer("Unavailable"))
                 {
                     tiles[currentHover.x, currentHover.y].layer = LayerMask.NameToLayer("Unavailable");
@@ -150,6 +158,10 @@ public class Board : MonoBehaviour
                 currentHover = hitPosition;
 
                 if (tiles[hitPosition.x, hitPosition.y].layer == LayerMask.NameToLayer("Occupied") && currentlyDragging != null/* && passengers[currentHover.x, currentHover.y] == null*//* && passengers[currentHover.x, currentHover.y] == null*/) //uncomment the && part if tile under passenger should turn green and not stay red
+                {
+                    tiles[hitPosition.x, hitPosition.y].layer = LayerMask.NameToLayer("Occupied");
+                }
+                else if (tiles[hitPosition.x, hitPosition.y].layer == LayerMask.NameToLayer("Occupied") && passengers[hitPosition.x, hitPosition.y] == null)
                 {
                     tiles[hitPosition.x, hitPosition.y].layer = LayerMask.NameToLayer("Occupied");
                 }
@@ -181,9 +193,32 @@ public class Board : MonoBehaviour
 
                 bool validMove = MoveTo(currentlyDragging, hitPosition.x, hitPosition.y);
 
+/*                if (currentlyDragging.type == PassengerType.Bulky)
+                {
+                    tiles[previousPosition.x - 1, previousPosition.y].layer = LayerMask.NameToLayer("Tile");
+
+                    if (currentlyDragging.currentX - 1 >= 0 && currentlyDragging.currentX - 1 < tiles.GetLength(0) && currentlyDragging.currentY >= 0 && currentlyDragging.currentY < tiles.GetLength(1))
+                    {
+                        tiles[currentlyDragging.currentX - 1, currentlyDragging.currentY].layer = LayerMask.NameToLayer("Occupied");
+                    }
+                    else
+                    {
+                        validMove = false;
+                    }
+                }*/
+
                 //go back to previous position
                 if (!validMove)
                 {
+/*                    if (currentlyDragging.type == PassengerType.Bulky)
+                    {
+                        currentlyDragging.SetPosition(GetTileCenter(previousPosition.x, previousPosition.y));
+                        tiles[previousPosition.x, previousPosition.y].layer = LayerMask.NameToLayer("Occupied");
+                        tiles[previousPosition.x - 1, previousPosition.y].layer = LayerMask.NameToLayer("Occupied");
+                        tiles[currentlyDragging.currentX, currentlyDragging.currentY].layer = LayerMask.NameToLayer("Tile");
+                        Debug.Log("Changed the position of bulky person back to previous position");
+                    }*/
+
                     currentlyDragging.SetPosition(GetTileCenter(previousPosition.x, previousPosition.y));
                 }
 
@@ -191,16 +226,12 @@ public class Board : MonoBehaviour
 
                 tiles[currentlyDragging.currentX, currentlyDragging.currentY].layer = LayerMask.NameToLayer("Hover");
 
-                if (currentlyDragging.type == PassengerType.Bulky)
-                {
-                    tiles[currentlyDragging.currentX - 1, currentlyDragging.currentY].layer = LayerMask.NameToLayer("Occupied");
-                }
-
                 currentlyDragging = null;
             }
         }
         else
         {
+            //if going out of bounds, change previous tile
             if (currentHover != -Vector2Int.one)
             {
                 if (ContainsValidMove(ref availableMoves, currentHover))
@@ -210,10 +241,17 @@ public class Board : MonoBehaviour
                 else if (passengers[currentHover.x, currentHover.y] != null)
                 {
                     tiles[currentHover.x, currentHover.y].layer = LayerMask.NameToLayer("Occupied");
+                    //Debug.Log("Set tile to occupied");
+                }
+                else if (passengers[currentHover.x, currentHover.y] == null && tiles[currentHover.x, currentHover.y].layer == LayerMask.NameToLayer("Occupied"))
+                {
+                    tiles[currentHover.x, currentHover.y].layer = LayerMask.NameToLayer("Occupied");
+                    //Debug.Log("OK NOW ITS WORKING I THINK");
                 }
                 else
                 {
                     tiles[currentHover.x, currentHover.y].layer = LayerMask.NameToLayer("Tile");
+                    //Debug.Log("Tile has been set back to just being tile");
                 }
                 currentHover = -Vector2Int.one;
             }
@@ -390,19 +428,19 @@ public class Board : MonoBehaviour
     {
         for (int i = 0; i < availableMoves.Count; i++)
         {
-            if (tiles[availableMoves[i].x, availableMoves[i].y].layer == LayerMask.NameToLayer("Unavailable"))
+            if (tiles[availableMoves[i].x, availableMoves[i].y].layer == LayerMask.NameToLayer("Unavailable") || tiles[availableMoves[i].x, availableMoves[i].y].layer == LayerMask.NameToLayer("Occupied"))
             {
                 continue; //Skips the tile that is unavailable and continues with the rest
             }
 
-                tiles[availableMoves[i].x, availableMoves[i].y].layer = LayerMask.NameToLayer("MovableSpot");
+            tiles[availableMoves[i].x, availableMoves[i].y].layer = LayerMask.NameToLayer("MovableSpot");
         }
     }
     private void RemoveMovableTiles()
     {
         for (int i = 0; i < availableMoves.Count; i++)
         {
-            if (tiles[availableMoves[i].x, availableMoves[i].y].layer == LayerMask.NameToLayer("Unavailable"))
+            if (tiles[availableMoves[i].x, availableMoves[i].y].layer == LayerMask.NameToLayer("Unavailable") || tiles[availableMoves[i].x, availableMoves[i].y].layer == LayerMask.NameToLayer("Occupied"))
             {
                 continue; //Skips the tile that is unavailable and continues with the rest
             }

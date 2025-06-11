@@ -3,6 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum TileType
+{
+    Train = 0,
+    Chair = 1,
+    Platform = 2
+}
+
 public class Board : MonoBehaviour
 {
     //Spawns unavailable tiles

@@ -62,6 +62,14 @@ public class Board : MonoBehaviour
         new Vector2Int(5, 2),   new Vector2Int(4, 2),
     };
 
+    private readonly HashSet<Vector2Int> chairTilesAtStart = new HashSet<Vector2Int>
+    {
+        new Vector2Int(11, 7),   new Vector2Int(4, 5),
+        new Vector2Int(10, 7),   new Vector2Int(4, 4),
+        new Vector2Int(9, 7),   new Vector2Int(4, 3),
+        new Vector2Int(8, 7),   new Vector2Int(4, 2),
+    };
+
     [Header("Art")]
     [SerializeField] private Material tileMaterial;
     [SerializeField] private float dragOffset = 1.25f;
@@ -74,7 +82,9 @@ public class Board : MonoBehaviour
 
     [Header("Prefabs & Materials")]
     [SerializeField] private GameObject[] prefabs;
-    [SerializeField] private GameObject floorTile;
+    [SerializeField] private GameObject platformTile;
+    [SerializeField] private GameObject chairTile;
+    [SerializeField] private GameObject trainTile;
     [SerializeField] private float yOffsetFloorTile;
     [SerializeField] private float yPositionOffset;
 
@@ -335,7 +345,7 @@ public class Board : MonoBehaviour
                     platformTiles.Add(tiles[x, y]);
                 }
 
-                Instantiate(floorTile, new Vector3(GetTileCenter(x, y).x, yOffsetFloorTile, GetTileCenter(x, y).z), Quaternion.Euler(-90, 0, 0));
+                Instantiate(platformTile, new Vector3(GetTileCenter(x, y).x, yOffsetFloorTile, GetTileCenter(x, y).z), Quaternion.Euler(-90, 0, 0));
             }
         }
     }

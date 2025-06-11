@@ -168,8 +168,8 @@ MonoBehaviour:
   - {fileID: 2095667300714928838, guid: 4b73e155481c87f43a243ebc8f768f6e, type: 3}
   - {fileID: 2095667300714928838, guid: 4b73e155481c87f43a243ebc8f768f6e, type: 3}
   platformTile: {fileID: 3268293465362098123, guid: c93c2e018b16e5c4a920714b39b2ec94, type: 3}
-  chairTile: {fileID: 0}
-  trainTile: {fileID: 0}
+  chairTile: {fileID: 3268293465362098123, guid: 1497b4a3d4a7f4c43909b03d72bf131c, type: 3}
+  trainTile: {fileID: 3268293465362098123, guid: 14738d04b4bad9640a31eb4cc92dcd4c, type: 3}
   yOffsetFloorTile: 0.95
   yPositionOffset: 0
   platformTiles: []

@@ -15,18 +15,18 @@ public class Board : MonoBehaviour
     //Spawns unavailable tiles
     private readonly HashSet<Vector2Int> occupiedTilesAtStart = new HashSet<Vector2Int>
     {
-        new Vector2Int(11, 0),  new Vector2Int(11, 1), new Vector2Int(11, 2),  new Vector2Int(11, 3), new Vector2Int(11, 4), new Vector2Int(11, 5), new Vector2Int(11, 6),
-        new Vector2Int(10, 0),  new Vector2Int(10, 1), new Vector2Int(10, 2),  new Vector2Int(10, 3), new Vector2Int(10, 4), new Vector2Int(10, 5), new Vector2Int(10, 6),
-        new Vector2Int(9, 0),   new Vector2Int(9, 1),  new Vector2Int(9, 2),   new Vector2Int(9, 3),  new Vector2Int(9, 4),  new Vector2Int(9, 5),  new Vector2Int(9, 6),
-        new Vector2Int(8, 0),   new Vector2Int(8, 1),  new Vector2Int(8, 2),   new Vector2Int(8, 3),  new Vector2Int(8, 4),  new Vector2Int(8, 5),  new Vector2Int(8, 6),
-        new Vector2Int(7, 0),   new Vector2Int(7, 1),  new Vector2Int(3, 2),   new Vector2Int(3, 3),  new Vector2Int(3, 4),  new Vector2Int(3, 5),  new Vector2Int(7, 6),
-        new Vector2Int(6, 0),   new Vector2Int(6, 1),  new Vector2Int(2, 2),   new Vector2Int(2, 3),  new Vector2Int(2, 4),  new Vector2Int(2, 5),  new Vector2Int(6, 6),
-        new Vector2Int(5, 0),   new Vector2Int(5, 1),  new Vector2Int(1, 2),   new Vector2Int(1, 3),  new Vector2Int(1, 4),  new Vector2Int(1, 5),  new Vector2Int(5, 6),
-        new Vector2Int(4, 0),   new Vector2Int(4, 1),  new Vector2Int(0, 2),   new Vector2Int(0, 3),  new Vector2Int(0, 4),  new Vector2Int(0, 5),  new Vector2Int(4, 6),
-        new Vector2Int(3, 0),   new Vector2Int(3, 1),                                                                                               new Vector2Int(3, 6),
-        new Vector2Int(2, 0),   new Vector2Int(2, 1),                                                                                               new Vector2Int(2, 6),
-        new Vector2Int(1, 0),   new Vector2Int(1, 1),                                                                                               new Vector2Int(1, 6),
-        new Vector2Int(0, 0),   new Vector2Int(0, 1),                                                                                               new Vector2Int(0, 6),
+        new Vector2Int(11, 0),  new Vector2Int(11, 1), new Vector2Int(11, 2),  new Vector2Int(11, 3), new Vector2Int(11, 4),    new Vector2Int(17, 3),  new Vector2Int(17, 5),  new Vector2Int(5, 3),
+        new Vector2Int(10, 5),  new Vector2Int(3, 4),  new Vector2Int(3, 5),   new Vector2Int(2, 5),  new Vector2Int(11, 5),    new Vector2Int(16, 3),  new Vector2Int(16, 5),  new Vector2Int(4, 3),
+        new Vector2Int(9, 5),   new Vector2Int(2, 2),  new Vector2Int(2, 3),   new Vector2Int(2, 4),  new Vector2Int(1, 5),     new Vector2Int(15, 3),  new Vector2Int(15, 5),  new Vector2Int(6, 4),
+        new Vector2Int(8, 5),   new Vector2Int(1, 2),  new Vector2Int(1, 3),   new Vector2Int(1, 4),  new Vector2Int(0, 5),     new Vector2Int(14, 3),  new Vector2Int(14, 5),  new Vector2Int(5, 4),
+        new Vector2Int(3, 2),   new Vector2Int(3, 3),  new Vector2Int(0, 2),   new Vector2Int(0, 3),  new Vector2Int(17, 2),    new Vector2Int(13, 3),  new Vector2Int(13, 5),  new Vector2Int(4, 4),
+        new Vector2Int(6, 0),   new Vector2Int(6, 1),  new Vector2Int(17, 0),  new Vector2Int(17, 1), new Vector2Int(16, 2),    new Vector2Int(12, 3),  new Vector2Int(12, 5),
+        new Vector2Int(5, 0),   new Vector2Int(5, 1),  new Vector2Int(16, 0),  new Vector2Int(16, 1), new Vector2Int(15, 2),    new Vector2Int(17, 4),  new Vector2Int(5, 5),
+        new Vector2Int(4, 0),   new Vector2Int(4, 1),  new Vector2Int(15, 0),  new Vector2Int(15, 1), new Vector2Int(14, 2),    new Vector2Int(16, 4),  new Vector2Int(4, 5),
+        new Vector2Int(3, 0),   new Vector2Int(3, 1),  new Vector2Int(14, 0),  new Vector2Int(14, 1), new Vector2Int(13, 2),    new Vector2Int(15, 4),  new Vector2Int(6, 2),
+        new Vector2Int(2, 0),   new Vector2Int(2, 1),  new Vector2Int(13, 0),  new Vector2Int(13, 1), new Vector2Int(12, 2),    new Vector2Int(14, 4),  new Vector2Int(5, 2),
+        new Vector2Int(1, 0),   new Vector2Int(1, 1),  new Vector2Int(12, 0),  new Vector2Int(12, 1), new Vector2Int(7, 5),     new Vector2Int(13, 4),  new Vector2Int(4, 2),                                                                                   
+        new Vector2Int(0, 0),   new Vector2Int(0, 1),  new Vector2Int(0, 4),   new Vector2Int(0, 5),  new Vector2Int(6, 5),     new Vector2Int(12, 4),  new Vector2Int(6, 3),
     };
 
     //Apply TrainTiles tag on tiles at the start
@@ -48,18 +48,20 @@ public class Board : MonoBehaviour
 
     private readonly HashSet<Vector2Int> tagExitTilesAtStart = new HashSet<Vector2Int>
     {
-        new Vector2Int(6, 5),   new Vector2Int(7, 5),
-        new Vector2Int(6, 4),   new Vector2Int(7, 4),
-        new Vector2Int(6, 3),   new Vector2Int(7, 3),
-        new Vector2Int(6, 2),   new Vector2Int(7, 2),
+        new Vector2Int(9, 4),   new Vector2Int(10, 4),
+        new Vector2Int(9, 3),   new Vector2Int(10, 3),
+        new Vector2Int(9, 2),   new Vector2Int(10, 2),
+        new Vector2Int(9, 1),   new Vector2Int(10, 1),
+        new Vector2Int(9, 0),   new Vector2Int(10, 0),
     };
 
     private readonly HashSet<Vector2Int> tagEntranceTilesAtStart = new HashSet<Vector2Int>
     {
-        new Vector2Int(5, 5),   new Vector2Int(4, 5),
-        new Vector2Int(5, 4),   new Vector2Int(4, 4),
-        new Vector2Int(5, 3),   new Vector2Int(4, 3),
-        new Vector2Int(5, 2),   new Vector2Int(4, 2),
+        new Vector2Int(8, 4),   new Vector2Int(7, 4),
+        new Vector2Int(8, 3),   new Vector2Int(7, 3),
+        new Vector2Int(8, 2),   new Vector2Int(7, 2),
+        new Vector2Int(8, 1),   new Vector2Int(7, 1),
+        new Vector2Int(8, 0),   new Vector2Int(7, 0),
     };
 
     private readonly HashSet<Vector2Int> chairTilesAtStart = new HashSet<Vector2Int>
@@ -387,17 +389,17 @@ public class Board : MonoBehaviour
         passengers = new Passenger[tileCountX, tileCountY];
 
         //the tiles[0, 0] part should be equal to the line before it, like if passengers[0, 3], then afterwards the tiles one should be tiles[0, 3] so that when it spawns, the tile below it has its layer set to "Occupied"
-        passengers[5, 3] = SpawnSinglePiece(PassengerType.Standard);
-        tiles[5, 3].layer = LayerMask.NameToLayer("Occupied");
-        passengers[4, 3] = SpawnSinglePiece(PassengerType.Standard);
-        tiles[4, 3].layer = LayerMask.NameToLayer("Occupied");
-        passengers[5, 4] = SpawnSinglePiece(PassengerType.Standard);
-        tiles[5, 4].layer = LayerMask.NameToLayer("Occupied");
-        passengers[4, 5] = SpawnSinglePiece(PassengerType.Standard);
-        tiles[4, 5].layer = LayerMask.NameToLayer("Occupied");
-        passengers[5, 2] = SpawnSinglePiece(PassengerType.Bulky);
-        tiles[5, 2].layer = LayerMask.NameToLayer("Occupied");
-        tiles[4, 2].layer = LayerMask.NameToLayer("Occupied");
+        passengers[8, 4] = SpawnSinglePiece(PassengerType.Standard);
+        tiles[8, 4].layer = LayerMask.NameToLayer("Occupied");
+        passengers[7, 2] = SpawnSinglePiece(PassengerType.Standard);
+        tiles[7, 2].layer = LayerMask.NameToLayer("Occupied");
+        passengers[7, 4] = SpawnSinglePiece(PassengerType.Standard);
+        tiles[7, 4].layer = LayerMask.NameToLayer("Occupied");
+        passengers[8, 1] = SpawnSinglePiece(PassengerType.Standard);
+        tiles[8, 1].layer = LayerMask.NameToLayer("Occupied");
+        passengers[8, 0] = SpawnSinglePiece(PassengerType.Bulky);
+        tiles[8, 0].layer = LayerMask.NameToLayer("Occupied");
+        tiles[7, 0].layer = LayerMask.NameToLayer("Occupied");
     }
 
     private Passenger SpawnSinglePiece(PassengerType type)

@@ -126,6 +126,7 @@ public class Board : MonoBehaviour
     private Camera currentCamera;
     private Vector2Int currentHover;
     private Vector3 bounds;
+    private Dictionary<Vector2Int, MeshRenderer> cachedSeats = new();
 
     private void Awake()
     {
@@ -598,7 +599,7 @@ public class Board : MonoBehaviour
             }
         }
 
-        return -Vector2Int.one; //INvalid
+        return -Vector2Int.one; //Invalid
     }
 
     private void TurnChairBackToOriginalColor(Vector2Int position)
@@ -621,17 +622,11 @@ public class Board : MonoBehaviour
     {
         if (tiles[position.x, position.y].tag == "ChairTile")
         {
-            Transform seat = tiles[position.x, position.y].transform.Find("TileSeat(Clone)/Tile_Seat");
-            if (seat != null)
+            var renderer = GetSeatRenderer(position);
+            if (renderer != null && renderer.materials.Length > 1)
             {
-                MeshRenderer renderer = seat.GetComponent<MeshRenderer>();
-
                 originalChairColor = renderer.materials[1].color;
-
-                if (renderer != null && renderer.materials.Length > 1)
-                {
-                    renderer.materials[1].color = hoverMaterial.color;//new Color32(111, 164, 58, 255);
-                }
+                renderer.materials[1].color = hoverMaterial.color;
             }
         }
     }
@@ -640,19 +635,40 @@ public class Board : MonoBehaviour
     {
         if (tiles[position.x, position.y].tag == "ChairTile")
         {
-            Transform seat = tiles[position.x, position.y].transform.Find("TileSeat(Clone)/Tile_Seat");
+            var renderer = GetSeatRenderer(position);
+            if (renderer != null && renderer.materials.Length > 1)
+            {
+                //NEED TO ADD AN IF STATEMENT HERE FOR THE originalChairColor thing so that it checks if its already their so that it wont be changing everytime its called
+                originalChairColor = renderer.materials[1].color;
+                renderer.materials[1].color = color;
+            }
+            /*            Transform seat = tiles[position.x, position.y].transform.Find("TileSeat(Clone)/Tile_Seat");
+                        if (seat != null)
+                        {
+                            MeshRenderer renderer = seat.GetComponent<MeshRenderer>();
+
+                            originalChairColor = renderer.materials[1].color;
+
+                            if (renderer != null && renderer.materials.Length > 1)
+                            {
+                                renderer.materials[1].color = color;//new Color32(111, 164, 58, 255);
+                            }
+                        }*/
+        }
+    }
+
+    private MeshRenderer GetSeatRenderer(Vector2Int pos)
+    {
+        if (!cachedSeats.TryGetValue(pos, out var renderer))
+        {
+            var seat = tiles[pos.x, pos.y].transform.Find("TileSeat(Clone)/Tile_Seat");
             if (seat != null)
             {
-                MeshRenderer renderer = seat.GetComponent<MeshRenderer>();
-
-                originalChairColor = renderer.materials[1].color;
-
-                if (renderer != null && renderer.materials.Length > 1)
-                {
-                    renderer.materials[1].color = color;//new Color32(111, 164, 58, 255);
-                }
+                renderer = seat.GetComponent<MeshRenderer>();
+                cachedSeats[pos] = renderer;
             }
         }
+        return renderer;
     }
 
     //Possible Debug stuff (Might need to move to GameManager?)

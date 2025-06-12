@@ -31,6 +31,8 @@ public class Passenger : MonoBehaviour
     {
         assignedColor = (StationColor)Random.Range(0, System.Enum.GetValues(typeof(StationColor)).Length);
         Debug.Log("Assigned Color: " + assignedColor);
+
+        Debug.Log("Can't find " + gameObject.name);
         SetPassengerStation(gameObject, assignedColor.ToString());
     }
 
@@ -150,11 +152,11 @@ public class Passenger : MonoBehaviour
     private bool SetPassengerStation(GameObject passenger, string stationColor)
     {
         //could be changed to enum instead, but for now, its by gameObject name
-        if (gameObject.name.Contains("Girl"))
+        if (gameObject.name.Contains("Base"))
         {
-            Transform childTransform = passenger.transform.Find("Torso");
+            Transform childTransform = passenger.transform.Find("f_top_shirt");
 
-            MeshRenderer childMeshRenderer = childTransform.GetComponent<MeshRenderer>();
+            SkinnedMeshRenderer childMeshRenderer = childTransform.GetComponent<SkinnedMeshRenderer>();
 
             var material = childMeshRenderer.material;
             material.SetColor(ColorProperty, GetStationColor(stationColor));
@@ -162,7 +164,7 @@ public class Passenger : MonoBehaviour
         }
 
         #region NULL-CHECKS
-        if (!passenger.TryGetComponent<MeshRenderer>(out var meshRenderer))
+        if (!passenger.TryGetComponent<SkinnedMeshRenderer>(out var skinnedMeshRenderer))
         {
             Debug.LogError("No MeshRenderer found on passenger prefab.");
             return false;

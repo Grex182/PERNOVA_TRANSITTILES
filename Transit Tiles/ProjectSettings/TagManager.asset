@@ -6,9 +6,8 @@ TagManager:
   tags:
   - Occupied
   - TrainTile
-  - ExitTile
-  - EntranceTile
   - ChairTile
+  - PlatformTile
   layers:
   - Default
   - TransparentFX

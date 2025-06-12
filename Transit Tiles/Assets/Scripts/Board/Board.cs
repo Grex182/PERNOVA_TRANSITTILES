@@ -289,14 +289,9 @@ public class Board : MonoBehaviour
                 {
                     tiles[x, y].tag = "TrainTile";
                 }
-                else if (GetComponent<BoardData>().IsMatchingTileSet(TileSetType.TaggedExitTiles, tilePos))
+                else if (GetComponent<BoardData>().IsMatchingTileSet(TileSetType.TaggedPlatformTiles, tilePos))
                 {
-                    tiles[x, y].tag = "ExitTile";
-                    platformTiles.Add(tiles[x, y]);
-                }
-                else if (GetComponent<BoardData>().IsMatchingTileSet(TileSetType.TaggedEntranceTiles, tilePos))
-                {
-                    tiles[x, y].tag = "EntranceTile";
+                    tiles[x, y].tag = "PlatformTile";
                     platformTiles.Add(tiles[x, y]);
                 }
 

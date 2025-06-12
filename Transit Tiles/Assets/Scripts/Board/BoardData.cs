@@ -6,8 +6,7 @@ public enum TileSetType
 {
     OccupiedTiles,
     TaggedTrainTiles,
-    TaggedExitTiles,
-    TaggedEntranceTiles,
+    TaggedPlatformTiles,
     ChairTiles,
     PlatformTiles
 }
@@ -50,22 +49,13 @@ public class BoardData : MonoBehaviour
         new Vector2Int(0, 7),   new Vector2Int(0, 8),   new Vector2Int(0, 9),   new Vector2Int(0, 10),  new Vector2Int(0, 11),
     };
 
-    private readonly HashSet<Vector2Int> tagExitTilesAtStart = new HashSet<Vector2Int>
+    private readonly HashSet<Vector2Int> tagPlatformTilesAtStart = new HashSet<Vector2Int>
     {
-        new Vector2Int(9, 4),   new Vector2Int(10, 4),
-        new Vector2Int(9, 3),   new Vector2Int(10, 3),
-        new Vector2Int(9, 2),   new Vector2Int(10, 2),
-        new Vector2Int(9, 1),   new Vector2Int(10, 1),
-        new Vector2Int(9, 0),   new Vector2Int(10, 0),
-    };
-
-    private readonly HashSet<Vector2Int> tagEntranceTilesAtStart = new HashSet<Vector2Int>
-    {
-        new Vector2Int(8, 4),   new Vector2Int(7, 4),
-        new Vector2Int(8, 3),   new Vector2Int(7, 3),
-        new Vector2Int(8, 2),   new Vector2Int(7, 2),
-        new Vector2Int(8, 1),   new Vector2Int(7, 1),
-        new Vector2Int(8, 0),   new Vector2Int(7, 0),
+        new Vector2Int(9, 4),   new Vector2Int(10, 4),  new Vector2Int(8, 4),   new Vector2Int(7, 4),
+        new Vector2Int(9, 3),   new Vector2Int(10, 3),  new Vector2Int(8, 3),   new Vector2Int(7, 3),
+        new Vector2Int(9, 2),   new Vector2Int(10, 2),  new Vector2Int(8, 2),   new Vector2Int(7, 2),
+        new Vector2Int(9, 1),   new Vector2Int(10, 1),  new Vector2Int(8, 1),   new Vector2Int(7, 1),
+        new Vector2Int(9, 0),   new Vector2Int(10, 0),  new Vector2Int(8, 0),   new Vector2Int(7, 0),
     };
 
     private readonly HashSet<Vector2Int> chairTilesAtStart = new HashSet<Vector2Int>
@@ -111,11 +101,8 @@ public class BoardData : MonoBehaviour
             case TileSetType.TaggedTrainTiles:
                 tileSet = tagTrainTilesAtStart;
                 break;
-            case TileSetType.TaggedExitTiles:
-                tileSet = tagExitTilesAtStart;
-                break;
-            case TileSetType.TaggedEntranceTiles:
-                tileSet = tagEntranceTilesAtStart;
+            case TileSetType.TaggedPlatformTiles:
+                tileSet = tagPlatformTilesAtStart;
                 break;
             case TileSetType.ChairTiles:
                 tileSet = chairTilesAtStart;

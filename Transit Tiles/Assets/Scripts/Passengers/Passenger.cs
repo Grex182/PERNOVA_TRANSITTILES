@@ -133,7 +133,7 @@ public class Passenger : MonoBehaviour
 
             Debug.Log("Passenger entered train.");
         }
-        else if (other.CompareTag("ExitTile") && isInsideTrain && !StationManager.instance.isTrainMoving)
+        else if (other.CompareTag("PlatformTile") && isInsideTrain && !StationManager.instance.isTrainMoving && !StationManager.instance.hasGameStarted)
         {
             if (assignedColor == StationManager.instance.stationColor)
             {

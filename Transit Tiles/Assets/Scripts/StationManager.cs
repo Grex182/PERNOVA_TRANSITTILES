@@ -28,6 +28,7 @@ public class StationManager : Singleton<StationManager>
 
     [Header("Booleans")]
     [SerializeField] public bool isTrainMoving = false;
+    [SerializeField] public bool hasGameStarted = true;
 
     private int currentStationIndex = 0;
     private int direction = 1; // 1 = forward, -1 = backward
@@ -51,6 +52,12 @@ public class StationManager : Singleton<StationManager>
 
         Board.DisablePlatformTiles();
         isTrainMoving = true;
+
+        if (hasGameStarted)
+        {
+            hasGameStarted = false;
+        }
+
         Debug.Log("Train is now moving");
 
         StartCoroutine(TravelTimer());

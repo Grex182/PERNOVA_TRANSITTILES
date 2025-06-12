@@ -113,6 +113,8 @@ public class Board : MonoBehaviour
     [SerializeField] private float yOffsetFloorTile;
     [SerializeField] private float yPositionOffset;
     [SerializeField] private Color originalChairColor;
+    [SerializeField] private Material hoverMaterial;
+    [SerializeField] private Material highlightMaterial;
 
     private Passenger[,] passengers;
     [SerializeField] private List<GameObject> platformTiles = new List<GameObject>();
@@ -199,7 +201,7 @@ public class Board : MonoBehaviour
                 {
                     tiles[currentHover.x, currentHover.y].layer = LayerMask.NameToLayer("Tile");
 
-                    TurnChairBackToOriginalColor();
+                    TurnChairBackToOriginalColor(currentHover);
                 }
 
                 currentHover = hitPosition;
@@ -301,7 +303,7 @@ public class Board : MonoBehaviour
                 {
                     tiles[currentHover.x, currentHover.y].layer = LayerMask.NameToLayer("Tile");
 
-                    TurnChairBackToOriginalColor();
+                    TurnChairBackToOriginalColor(currentHover);
 
                     //Debug.Log("Tile has been set back to just being tile");
                 }
@@ -500,6 +502,8 @@ public class Board : MonoBehaviour
             }
 
             tiles[availableMoves[i].x, availableMoves[i].y].layer = LayerMask.NameToLayer("MovableSpot");
+
+            ChangeChairColor(availableMoves[i], highlightMaterial.color);
         }
     }
     private void RemoveMovableTiles()
@@ -512,6 +516,8 @@ public class Board : MonoBehaviour
             }
 
             tiles[availableMoves[i].x, availableMoves[i].y].layer = LayerMask.NameToLayer("Tile");
+
+            TurnChairBackToOriginalColor(availableMoves[i]);
         }
 
         availableMoves.Clear();
@@ -595,11 +601,11 @@ public class Board : MonoBehaviour
         return -Vector2Int.one; //INvalid
     }
 
-    private void TurnChairBackToOriginalColor()
+    private void TurnChairBackToOriginalColor(Vector2Int position)
     {
-        if (tiles[currentHover.x, currentHover.y].tag == "ChairTile")
+        if (tiles[position.x, position.y].tag == "ChairTile")
         {
-            Transform seat = tiles[currentHover.x, currentHover.y].transform.Find("TileSeat(Clone)/Tile_Seat");
+            Transform seat = tiles[position.x, position.y].transform.Find("TileSeat(Clone)/Tile_Seat");
             if (seat != null)
             {
                 MeshRenderer renderer = seat.GetComponent<MeshRenderer>();
@@ -624,7 +630,26 @@ public class Board : MonoBehaviour
 
                 if (renderer != null && renderer.materials.Length > 1)
                 {
-                    renderer.materials[1].color = new Color32(111, 164, 58, 255);
+                    renderer.materials[1].color = hoverMaterial.color;//new Color32(111, 164, 58, 255);
+                }
+            }
+        }
+    }
+
+    private void ChangeChairColor(Vector2Int position, Color color)
+    {
+        if (tiles[position.x, position.y].tag == "ChairTile")
+        {
+            Transform seat = tiles[position.x, position.y].transform.Find("TileSeat(Clone)/Tile_Seat");
+            if (seat != null)
+            {
+                MeshRenderer renderer = seat.GetComponent<MeshRenderer>();
+
+                originalChairColor = renderer.materials[1].color;
+
+                if (renderer != null && renderer.materials.Length > 1)
+                {
+                    renderer.materials[1].color = color;//new Color32(111, 164, 58, 255);
                 }
             }
         }

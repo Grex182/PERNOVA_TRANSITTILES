@@ -172,6 +172,9 @@ MonoBehaviour:
   trainTile: {fileID: 3268293465362098123, guid: 14738d04b4bad9640a31eb4cc92dcd4c, type: 3}
   yOffsetFloorTile: 0.95
   yPositionOffset: 0
+  originalChairColor: {r: 0, g: 0, b: 0, a: 0}
+  hoverMaterial: {fileID: 2100000, guid: 40a5ccbea8deea14285f838d8c566442, type: 2}
+  highlightMaterial: {fileID: 2100000, guid: 6ca4b664a74378b4690e4c38cde181c7, type: 2}
   platformTiles: []
   tileCountX: 18
   tileCountY: 11

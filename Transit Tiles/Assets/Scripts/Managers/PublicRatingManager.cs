@@ -1,10 +1,8 @@
-using System;
-using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class PublicRatingManager : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()

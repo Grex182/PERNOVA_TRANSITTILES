@@ -15,10 +15,6 @@ public enum StationColor
 
 public class StationManager : Singleton<StationManager>
 {
-    [SerializeField] Board _board;
-
-    public Board Board { get { return _board; } set { _board = value; } }
-
     [Header("Colors")]
     [SerializeField] public StationColor stationColor;
 
@@ -32,11 +28,10 @@ public class StationManager : Singleton<StationManager>
 
     private int currentStationIndex = 0;
     private int direction = 1; // 1 = forward, -1 = backward
-    public static StationManager instance;
 
     private void Awake()
     {
-        instance = this;
+        GameManager.instance.StationManager = this;
     }
 
     private void Start()
@@ -50,7 +45,7 @@ public class StationManager : Singleton<StationManager>
     {
         yield return new WaitForSeconds(stationTime);
 
-        Board.DisablePlatformTiles();
+        GameManager.instance.Board.DisablePlatformTiles();
         isTrainMoving = true;
 
         if (hasGameStarted)
@@ -67,7 +62,7 @@ public class StationManager : Singleton<StationManager>
     {
         yield return new WaitForSeconds(travelTime);
 
-        Board.EnablePlatformTiles();
+        GameManager.instance.Board.EnablePlatformTiles();
         isTrainMoving = false;
         Debug.Log("Train has stopped");
 

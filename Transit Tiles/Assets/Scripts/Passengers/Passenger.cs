@@ -127,15 +127,15 @@ public class Passenger : MonoBehaviour
 
     public virtual void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("TrainTile") && !isInsideTrain && !StationManager.instance.isTrainMoving)
+        if (other.CompareTag("TrainTile") && !isInsideTrain && !GameManager.instance.StationManager.isTrainMoving)
         {
             isInsideTrain = true;
 
             Debug.Log("Passenger entered train.");
         }
-        else if (other.CompareTag("PlatformTile") && isInsideTrain && !StationManager.instance.isTrainMoving && !StationManager.instance.hasGameStarted)
+        else if (other.CompareTag("PlatformTile") && isInsideTrain && !GameManager.instance.StationManager.isTrainMoving && !GameManager.instance.StationManager.hasGameStarted)
         {
-            if (assignedColor == StationManager.instance.stationColor)
+            if (assignedColor == GameManager.instance.StationManager.stationColor)
             {
                 Debug.Log("YOU GOT A POINT");
             }

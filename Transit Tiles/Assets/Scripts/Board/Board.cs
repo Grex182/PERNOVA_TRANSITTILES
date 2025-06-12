@@ -56,7 +56,7 @@ public class Board : MonoBehaviour
 
     private void Start()
     {
-        StationManager.instance.Board = this;
+        GameManager.instance.Board = this;
     }
 
     private void Update()

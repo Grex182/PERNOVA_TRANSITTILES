@@ -12,89 +12,6 @@ public enum TileType
 
 public class Board : MonoBehaviour
 {
-    //Spawns unavailable tiles
-    private readonly HashSet<Vector2Int> occupiedTilesAtStart = new HashSet<Vector2Int>
-    {
-        new Vector2Int(11, 0),  new Vector2Int(11, 1), new Vector2Int(11, 2),  new Vector2Int(11, 3), new Vector2Int(11, 4),    new Vector2Int(17, 3),  new Vector2Int(17, 5),  new Vector2Int(5, 3),
-        new Vector2Int(10, 5),  new Vector2Int(3, 4),  new Vector2Int(3, 5),   new Vector2Int(2, 5),  new Vector2Int(11, 5),    new Vector2Int(16, 3),  new Vector2Int(16, 5),  new Vector2Int(4, 3),
-        new Vector2Int(9, 5),   new Vector2Int(2, 2),  new Vector2Int(2, 3),   new Vector2Int(2, 4),  new Vector2Int(1, 5),     new Vector2Int(15, 3),  new Vector2Int(15, 5),  new Vector2Int(6, 4),
-        new Vector2Int(8, 5),   new Vector2Int(1, 2),  new Vector2Int(1, 3),   new Vector2Int(1, 4),  new Vector2Int(0, 5),     new Vector2Int(14, 3),  new Vector2Int(14, 5),  new Vector2Int(5, 4),
-        new Vector2Int(3, 2),   new Vector2Int(3, 3),  new Vector2Int(0, 2),   new Vector2Int(0, 3),  new Vector2Int(17, 2),    new Vector2Int(13, 3),  new Vector2Int(13, 5),  new Vector2Int(4, 4),
-        new Vector2Int(6, 0),   new Vector2Int(6, 1),  new Vector2Int(17, 0),  new Vector2Int(17, 1), new Vector2Int(16, 2),    new Vector2Int(12, 3),  new Vector2Int(12, 5),
-        new Vector2Int(5, 0),   new Vector2Int(5, 1),  new Vector2Int(16, 0),  new Vector2Int(16, 1), new Vector2Int(15, 2),    new Vector2Int(17, 4),  new Vector2Int(5, 5),
-        new Vector2Int(4, 0),   new Vector2Int(4, 1),  new Vector2Int(15, 0),  new Vector2Int(15, 1), new Vector2Int(14, 2),    new Vector2Int(16, 4),  new Vector2Int(4, 5),
-        new Vector2Int(3, 0),   new Vector2Int(3, 1),  new Vector2Int(14, 0),  new Vector2Int(14, 1), new Vector2Int(13, 2),    new Vector2Int(15, 4),  new Vector2Int(6, 2),
-        new Vector2Int(2, 0),   new Vector2Int(2, 1),  new Vector2Int(13, 0),  new Vector2Int(13, 1), new Vector2Int(12, 2),    new Vector2Int(14, 4),  new Vector2Int(5, 2),
-        new Vector2Int(1, 0),   new Vector2Int(1, 1),  new Vector2Int(12, 0),  new Vector2Int(12, 1), new Vector2Int(7, 5),     new Vector2Int(13, 4),  new Vector2Int(4, 2),                                                                                   
-        new Vector2Int(0, 0),   new Vector2Int(0, 1),  new Vector2Int(0, 4),   new Vector2Int(0, 5),  new Vector2Int(6, 5),     new Vector2Int(12, 4),  new Vector2Int(6, 3),
-    };
-
-    //Apply TrainTiles tag on tiles at the start
-    private readonly HashSet<Vector2Int> tagTrainTilesAtStart = new HashSet<Vector2Int>
-    {
-        new Vector2Int(11, 7),  new Vector2Int(11, 8),  new Vector2Int(11, 9),  new Vector2Int(11, 10), new Vector2Int(11, 11),
-        new Vector2Int(10, 7),  new Vector2Int(10, 8),  new Vector2Int(10, 9),  new Vector2Int(10, 10), new Vector2Int(10, 11),
-        new Vector2Int(9, 7),   new Vector2Int(9, 8),   new Vector2Int(9, 9),   new Vector2Int(9, 10),  new Vector2Int(9, 11),
-        new Vector2Int(8, 7),   new Vector2Int(8, 8),   new Vector2Int(8, 9),   new Vector2Int(8, 10),  new Vector2Int(8, 11),
-        new Vector2Int(7, 7),   new Vector2Int(7, 8),   new Vector2Int(7, 9),   new Vector2Int(7, 10),  new Vector2Int(7, 11),
-        new Vector2Int(6, 7),   new Vector2Int(6, 8),   new Vector2Int(6, 9),   new Vector2Int(6, 10),  new Vector2Int(6, 11),
-        new Vector2Int(5, 7),   new Vector2Int(5, 8),   new Vector2Int(5, 9),   new Vector2Int(5, 10),  new Vector2Int(5, 11),
-        new Vector2Int(4, 7),   new Vector2Int(4, 8),   new Vector2Int(4, 9),   new Vector2Int(4, 10),  new Vector2Int(4, 11),
-        new Vector2Int(3, 7),   new Vector2Int(3, 8),   new Vector2Int(3, 9),   new Vector2Int(3, 10),  new Vector2Int(3, 11),
-        new Vector2Int(2, 7),   new Vector2Int(2, 8),   new Vector2Int(2, 9),   new Vector2Int(2, 10),  new Vector2Int(2, 11),
-        new Vector2Int(1, 7),   new Vector2Int(1, 8),   new Vector2Int(1, 9),   new Vector2Int(1, 10),  new Vector2Int(1, 11),
-        new Vector2Int(0, 7),   new Vector2Int(0, 8),   new Vector2Int(0, 9),   new Vector2Int(0, 10),  new Vector2Int(0, 11),
-    };
-
-    private readonly HashSet<Vector2Int> tagExitTilesAtStart = new HashSet<Vector2Int>
-    {
-        new Vector2Int(9, 4),   new Vector2Int(10, 4),
-        new Vector2Int(9, 3),   new Vector2Int(10, 3),
-        new Vector2Int(9, 2),   new Vector2Int(10, 2),
-        new Vector2Int(9, 1),   new Vector2Int(10, 1),
-        new Vector2Int(9, 0),   new Vector2Int(10, 0),
-    };
-
-    private readonly HashSet<Vector2Int> tagEntranceTilesAtStart = new HashSet<Vector2Int>
-    {
-        new Vector2Int(8, 4),   new Vector2Int(7, 4),
-        new Vector2Int(8, 3),   new Vector2Int(7, 3),
-        new Vector2Int(8, 2),   new Vector2Int(7, 2),
-        new Vector2Int(8, 1),   new Vector2Int(7, 1),
-        new Vector2Int(8, 0),   new Vector2Int(7, 0),
-    };
-
-    private readonly HashSet<Vector2Int> chairTilesAtStart = new HashSet<Vector2Int>
-    {
-        new Vector2Int(15, 6),  new Vector2Int(6, 6),
-        new Vector2Int(14, 6),  new Vector2Int(5, 6),
-        new Vector2Int(13, 6),  new Vector2Int(4, 6),
-        new Vector2Int(12, 6),  new Vector2Int(3, 6),
-        new Vector2Int(11, 6),  new Vector2Int(2, 6),
-    };
-
-    private readonly HashSet<Vector2Int> platformTilesAtStart = new HashSet<Vector2Int>
-    {
-        new Vector2Int(17, 0),  new Vector2Int(17, 1),  new Vector2Int(17, 2),  new Vector2Int(17, 3),  new Vector2Int(17, 4),  new Vector2Int(17, 5),
-        new Vector2Int(16, 0),  new Vector2Int(16, 1),  new Vector2Int(16, 2),  new Vector2Int(16, 3),  new Vector2Int(16, 4),  new Vector2Int(16, 5),
-        new Vector2Int(15, 0),  new Vector2Int(15, 1),  new Vector2Int(15, 2),  new Vector2Int(15, 3),  new Vector2Int(15, 4),  new Vector2Int(15, 5),
-        new Vector2Int(14, 0),  new Vector2Int(14, 1),  new Vector2Int(14, 2),  new Vector2Int(14, 3),  new Vector2Int(14, 4),  new Vector2Int(14, 5),
-        new Vector2Int(13, 0),  new Vector2Int(13, 1),  new Vector2Int(13, 2),  new Vector2Int(13, 3),  new Vector2Int(13, 4),  new Vector2Int(13, 5),
-        new Vector2Int(12, 0),  new Vector2Int(12, 1),  new Vector2Int(12, 2),  new Vector2Int(12, 3),  new Vector2Int(12, 4),  new Vector2Int(12, 5),
-        new Vector2Int(11, 0),  new Vector2Int(11, 1),  new Vector2Int(11, 2),  new Vector2Int(11, 3),  new Vector2Int(11, 4),  new Vector2Int(11, 5),
-        new Vector2Int(10, 0),  new Vector2Int(10, 1),  new Vector2Int(10, 2),  new Vector2Int(10, 3),  new Vector2Int(10, 4),  new Vector2Int(10, 5),
-        new Vector2Int(9, 0),   new Vector2Int(9, 1),   new Vector2Int(9, 2),   new Vector2Int(9, 3),   new Vector2Int(9, 4),   new Vector2Int(9, 5),
-        new Vector2Int(8, 0),   new Vector2Int(8, 1),   new Vector2Int(8, 2),   new Vector2Int(8, 3),   new Vector2Int(8, 4),   new Vector2Int(8, 5),
-        new Vector2Int(7, 0),   new Vector2Int(7, 1),   new Vector2Int(7, 2),   new Vector2Int(7, 3),   new Vector2Int(7, 4),   new Vector2Int(7, 5),
-        new Vector2Int(6, 0),   new Vector2Int(6, 1),   new Vector2Int(6, 2),   new Vector2Int(6, 3),   new Vector2Int(6, 4),   new Vector2Int(6, 5),
-        new Vector2Int(5, 0),   new Vector2Int(5, 1),   new Vector2Int(5, 2),   new Vector2Int(5, 3),   new Vector2Int(5, 4),   new Vector2Int(5, 5),
-        new Vector2Int(4, 0),   new Vector2Int(4, 1),   new Vector2Int(4, 2),   new Vector2Int(4, 3),   new Vector2Int(4, 4),   new Vector2Int(4, 5),
-        new Vector2Int(3, 0),   new Vector2Int(3, 1),   new Vector2Int(3, 2),   new Vector2Int(3, 3),   new Vector2Int(3, 4),   new Vector2Int(3, 5),
-        new Vector2Int(2, 0),   new Vector2Int(2, 1),   new Vector2Int(2, 2),   new Vector2Int(2, 3),   new Vector2Int(2, 4),   new Vector2Int(2, 5),
-        new Vector2Int(1, 0),   new Vector2Int(1, 1),   new Vector2Int(1, 2),   new Vector2Int(1, 3),   new Vector2Int(1, 4),   new Vector2Int(1, 5),
-        new Vector2Int(0, 0),   new Vector2Int(0, 1),   new Vector2Int(0, 2),   new Vector2Int(0, 3),   new Vector2Int(0, 4),   new Vector2Int(0, 5),
-    };
-
     [Header("Art")]
     [SerializeField] private Material tileMaterial;
     [SerializeField] private float dragOffset = 1.25f;
@@ -363,34 +280,34 @@ public class Board : MonoBehaviour
                 Vector2Int tilePos = new Vector2Int(x, y);
                 tiles[x, y] = GenerateSingleTile(tileSize, x, y);
 
-                if (occupiedTilesAtStart.Contains(tilePos))
+                if (GetComponent<BoardData>().IsMatchingTileSet(TileSetType.OccupiedTiles, tilePos))
                 {
                     tiles[x, y].layer = LayerMask.NameToLayer("Unavailable");
                 }
 
-                if (tagTrainTilesAtStart.Contains(tilePos))
+                if (GetComponent<BoardData>().IsMatchingTileSet(TileSetType.TaggedTrainTiles, tilePos))
                 {
                     tiles[x, y].tag = "TrainTile";
                 }
-                else if (tagExitTilesAtStart.Contains(tilePos))
+                else if (GetComponent<BoardData>().IsMatchingTileSet(TileSetType.TaggedExitTiles, tilePos))
                 {
                     tiles[x, y].tag = "ExitTile";
                     platformTiles.Add(tiles[x, y]);
                 }
-                else if (tagEntranceTilesAtStart.Contains(tilePos))
+                else if (GetComponent<BoardData>().IsMatchingTileSet(TileSetType.TaggedEntranceTiles, tilePos))
                 {
                     tiles[x, y].tag = "EntranceTile";
                     platformTiles.Add(tiles[x, y]);
                 }
 
-                if (chairTilesAtStart.Contains(tilePos))
+                if (GetComponent<BoardData>().IsMatchingTileSet(TileSetType.ChairTiles, tilePos))
                 {
                     tiles[x, y].tag = "ChairTile";
 
                     GameObject chair = Instantiate(chairTile, new Vector3(GetTileCenter(x, y).x, yOffsetFloorTile, GetTileCenter(x, y).z), Quaternion.Euler(-90, 0, 0));
                     chair.transform.parent = tiles[x, y].transform;
                 }
-                else if (platformTilesAtStart.Contains(tilePos))
+                else if (GetComponent<BoardData>().IsMatchingTileSet(TileSetType.PlatformTiles, tilePos))
                 {
                     Instantiate(platformTile, new Vector3(GetTileCenter(x, y).x, yOffsetFloorTile, GetTileCenter(x, y).z), Quaternion.Euler(-90, 0, 0));
                 }

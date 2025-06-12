@@ -112,6 +112,7 @@ public class Board : MonoBehaviour
     [SerializeField] private GameObject trainTile;
     [SerializeField] private float yOffsetFloorTile;
     [SerializeField] private float yPositionOffset;
+    [SerializeField] private Color originalChairColor;
 
     private Passenger[,] passengers;
     [SerializeField] private List<GameObject> platformTiles = new List<GameObject>();
@@ -170,6 +171,8 @@ public class Board : MonoBehaviour
                 else
                 {
                     tiles[hitPosition.x, hitPosition.y].layer = LayerMask.NameToLayer("Hover");
+
+                    HoverChairColor(hitPosition);
                 }
             }
 
@@ -195,6 +198,8 @@ public class Board : MonoBehaviour
                 else
                 {
                     tiles[currentHover.x, currentHover.y].layer = LayerMask.NameToLayer("Tile");
+
+                    TurnChairBackToOriginalColor();
                 }
 
                 currentHover = hitPosition;
@@ -210,6 +215,8 @@ public class Board : MonoBehaviour
                 else
                 {
                     tiles[hitPosition.x, hitPosition.y].layer = LayerMask.NameToLayer("Hover");
+
+                    HoverChairColor(hitPosition);
                 }
             }
 
@@ -293,6 +300,9 @@ public class Board : MonoBehaviour
                 else
                 {
                     tiles[currentHover.x, currentHover.y].layer = LayerMask.NameToLayer("Tile");
+
+                    TurnChairBackToOriginalColor();
+
                     //Debug.Log("Tile has been set back to just being tile");
                 }
                 currentHover = -Vector2Int.one;
@@ -372,7 +382,10 @@ public class Board : MonoBehaviour
 
                 if (chairTilesAtStart.Contains(tilePos))
                 {
-                    Instantiate(chairTile, new Vector3(GetTileCenter(x, y).x, yOffsetFloorTile, GetTileCenter(x, y).z), Quaternion.Euler(-90, 0, 0));
+                    tiles[x, y].tag = "ChairTile";
+
+                    GameObject chair = Instantiate(chairTile, new Vector3(GetTileCenter(x, y).x, yOffsetFloorTile, GetTileCenter(x, y).z), Quaternion.Euler(-90, 0, 0));
+                    chair.transform.parent = tiles[x, y].transform;
                 }
                 else if (platformTilesAtStart.Contains(tilePos))
                 {
@@ -580,6 +593,41 @@ public class Board : MonoBehaviour
         }
 
         return -Vector2Int.one; //INvalid
+    }
+
+    private void TurnChairBackToOriginalColor()
+    {
+        if (tiles[currentHover.x, currentHover.y].tag == "ChairTile")
+        {
+            Transform seat = tiles[currentHover.x, currentHover.y].transform.Find("TileSeat(Clone)/Tile_Seat");
+            if (seat != null)
+            {
+                MeshRenderer renderer = seat.GetComponent<MeshRenderer>();
+                if (renderer != null && renderer.materials.Length > 1)
+                {
+                    renderer.materials[1].color = originalChairColor;
+                }
+            }
+        }
+    }
+
+    private void HoverChairColor(Vector2Int position)
+    {
+        if (tiles[position.x, position.y].tag == "ChairTile")
+        {
+            Transform seat = tiles[position.x, position.y].transform.Find("TileSeat(Clone)/Tile_Seat");
+            if (seat != null)
+            {
+                MeshRenderer renderer = seat.GetComponent<MeshRenderer>();
+
+                originalChairColor = renderer.materials[1].color;
+
+                if (renderer != null && renderer.materials.Length > 1)
+                {
+                    renderer.materials[1].color = new Color32(111, 164, 58, 255);
+                }
+            }
+        }
     }
 
     //Possible Debug stuff (Might need to move to GameManager?)

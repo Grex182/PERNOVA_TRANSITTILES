@@ -29,13 +29,10 @@ public class StationManager : Singleton<StationManager>
     private int currentStationIndex = 0;
     private int direction = 1; // 1 = forward, -1 = backward
 
-    private void Awake()
-    {
-        GameManager.instance.StationManager = this;
-    }
-
     private void Start()
     {
+        GameManager.instance.StationManager = this;
+
         stationColor = StationColor.Red;
 
         StartCoroutine(StationTimer());

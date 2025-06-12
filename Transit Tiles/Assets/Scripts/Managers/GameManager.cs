@@ -14,6 +14,14 @@ public class GameManager : Singleton<GameManager>
 
     public StationManager StationManager { get { return _stationManager; } set { _stationManager = value; } }
 
+    [SerializeField] PublicRatingManager _publicRatingManager;
+
+    public PublicRatingManager PublicRatingManager { get { return _publicRatingManager; } set { _publicRatingManager = value; } }
+
+    [SerializeField] ScoreManager _scoreManager;
+
+    public ScoreManager ScoreManager { get { return _scoreManager; } set { _scoreManager = value; } }
+
     public static GameManager instance;
 
     private void Awake()

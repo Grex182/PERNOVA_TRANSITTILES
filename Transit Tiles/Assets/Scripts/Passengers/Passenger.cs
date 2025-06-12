@@ -137,11 +137,12 @@ public class Passenger : MonoBehaviour
         {
             if (assignedColor == GameManager.instance.StationManager.stationColor)
             {
-                Debug.Log("YOU GOT A POINT");
+                GameManager.instance.ScoreManager.AddScore();
+                GameManager.instance.PublicRatingManager.AddPublicRating();
             }
             else
             {
-                Debug.Log("Welp, you just made someone mad ig");
+                GameManager.instance.PublicRatingManager.ReducePublicRating();
             }
 
             isInsideTrain = false;

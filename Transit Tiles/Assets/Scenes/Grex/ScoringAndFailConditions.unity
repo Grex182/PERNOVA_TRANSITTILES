@@ -157,7 +157,7 @@ MonoBehaviour:
   dragOffset: 1.5
   tileSize: 1
   gapSize: 0
-  yOffset: 0.5
+  yOffset: 0.52
   boardCenter: {x: 0, y: 0, z: 0}
   prefabs:
   - {fileID: 7746425930999144139, guid: a7c5cc6be2637f641978245978895e54, type: 3}
@@ -250,10 +250,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4302f890c45e9e544a7f655dbb3d76f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _board: {fileID: 0}
   stationColor: 0
-  stationTime: 8
-  travelTime: 10
+  stationTime: 10
+  travelTime: 8
   isTrainMoving: 0
   hasGameStarted: 1
 --- !u!1001 &274542468
@@ -1057,6 +1056,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80b57a43a614c294eb2857121fb99b11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _board: {fileID: 0}
+  _stationManager: {fileID: 0}
+  _publicRatingManager: {fileID: 0}
+  _scoreManager: {fileID: 0}
 --- !u!1001 &1244171457
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1332,6 +1335,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3bc94c7c0aa1f74987aae5fd888f02c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxPublicRating: 5
+  startingPublicRating: 2.5
+  currentPublicRating: 0
 --- !u!1001 &1894468821
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1453,6 +1459,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb7f6a22c970266429ea6e987ef75400, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentScore: 0
+  baseScoreValue: 100
 --- !u!1 &2037671942
 GameObject:
   m_ObjectHideFlags: 0

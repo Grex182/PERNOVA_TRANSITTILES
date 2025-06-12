@@ -154,7 +154,7 @@ public class Passenger : MonoBehaviour
         //could be changed to enum instead, but for now, its by gameObject name
         if (gameObject.name.Contains("Base"))
         {
-            Transform childTransform = passenger.transform.Find("f_top_shirt");
+            Transform childTransform = passenger.transform.Find("FemaleUpper/f_top_shirt");
 
             SkinnedMeshRenderer childMeshRenderer = childTransform.GetComponent<SkinnedMeshRenderer>();
 

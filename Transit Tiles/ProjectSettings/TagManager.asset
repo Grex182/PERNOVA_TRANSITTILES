@@ -9,6 +9,8 @@ TagManager:
   - ExitTile
   - EntranceTile
   - ChairTile
+  - Draggable
+  - CardSlot
   layers:
   - Default
   - TransparentFX

@@ -11,6 +11,7 @@ TagManager:
   - ChairTile
   - Draggable
   - CardSlot
+  - ActivateCard
   layers:
   - Default
   - TransparentFX

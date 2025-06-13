@@ -175,6 +175,16 @@ public class Passenger : MonoBehaviour
         return true;
     }
 
+    public void CheckPosition()
+    {
+        if (!isInsideTrain)
+        {
+            GameManager.instance.Board.spawnedPassengers.Remove(this);
+
+            Destroy(gameObject);
+        }
+    }
+
     private static readonly string[] validStationColors = new string[]
     {
         "Pink", "Red", "Orange", "Yellow", "Green", "Blue", "Violet"

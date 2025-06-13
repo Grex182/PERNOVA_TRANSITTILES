@@ -33,9 +33,12 @@ public class Board : MonoBehaviour
     [SerializeField] private Material hoverMaterial;
     [SerializeField] private Material highlightMaterial;
 
-    private Passenger[,] passengers;
+    [Header("Lists")]
     [SerializeField] private List<GameObject> platformTiles = new List<GameObject>();
     [SerializeField] private List<GameObject> platformTilePrefabs = new List<GameObject>();
+    [SerializeField] public List<Passenger> spawnedPassengers = new List<Passenger>();
+
+    private Passenger[,] passengers;
     private Passenger currentlyDragging;
     private List<Vector2Int> availableMoves = new List<Vector2Int>();
     [SerializeField] private int tileCountX = 8;
@@ -376,8 +379,8 @@ public class Board : MonoBehaviour
         Passenger passenger = Instantiate(prefabs[(int)type - 1]).GetComponent<Passenger>();
         //passenger.transform.localScale = Vector3.one;
         passenger.transform.SetParent(transform);
-
         passenger.type = type;
+        spawnedPassengers.Add(passenger);
 
         return passenger;
     }
@@ -500,6 +503,17 @@ public class Board : MonoBehaviour
         {
             pt.GetComponent<MeshRenderer>().enabled = false;
         }
+
+        //Just a backwards count of passengers inside spawnedPassengers list, to remove them if they were destroyed
+        for (int i = spawnedPassengers.Count - 1; i >= 0; i--)
+        {
+            spawnedPassengers[i].CheckPosition();
+        }
+
+        /*        foreach (var passenger in spawnedPassengers)
+                {
+                    passenger.CheckPosition();
+                }*/
     }
 
     public void EnablePlatformTiles()

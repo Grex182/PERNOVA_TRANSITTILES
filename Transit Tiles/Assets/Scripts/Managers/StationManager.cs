@@ -62,6 +62,7 @@ public class StationManager : Singleton<StationManager>
 
         GameManager.instance.Board.EnablePlatformTiles();
         isTrainMoving = false;
+
         Debug.Log("Train has stopped");
 
         UpdateStationColor();

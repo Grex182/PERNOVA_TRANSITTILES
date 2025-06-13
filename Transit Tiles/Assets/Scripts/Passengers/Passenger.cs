@@ -25,14 +25,13 @@ public class Passenger : MonoBehaviour
     private Vector3 desiredPosition;
     //[SerializeField] private Vector3 desiredScale = Vector3.one;
 
-    private bool isInsideTrain = false;
+    [SerializeField] private bool isInsideTrain = false;
 
     private void Start()
     {
         assignedColor = (StationColor)Random.Range(0, System.Enum.GetValues(typeof(StationColor)).Length);
         Debug.Log("Assigned Color: " + assignedColor);
 
-        Debug.Log("Can't find " + gameObject.name);
         SetPassengerStation(gameObject, assignedColor.ToString());
     }
 
@@ -157,7 +156,7 @@ public class Passenger : MonoBehaviour
         //could be changed to enum instead, but for now, its by gameObject name
         if (gameObject.name.Contains("Base"))
         {
-            Transform childTransform = passenger.transform.Find("FemaleUpper/f_top_shirt");
+            Transform childTransform = passenger.transform.Find("FemaleUpper/f_top_shirt"); //This definitely needs to be changed, no finds please (But if theres nothing else, this will do ig)
 
             SkinnedMeshRenderer childMeshRenderer = childTransform.GetComponent<SkinnedMeshRenderer>();
 

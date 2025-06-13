@@ -178,6 +178,7 @@ MonoBehaviour:
   highlightMaterial: {fileID: 2100000, guid: 6ca4b664a74378b4690e4c38cde181c7, type: 2}
   platformTiles: []
   platformTilePrefabs: []
+  spawnedPassengers: []
   tileCountX: 18
   tileCountY: 11
 --- !u!4 &58632780
@@ -778,6 +779,84 @@ MonoBehaviour:
   _publicRatingManager: {fileID: 0}
   _scoreManager: {fileID: 0}
   _stageSpawner: {fileID: 0}
+--- !u!1 &1123095609 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: eb987a1f1d8077f44a8aee72d3c01ea7, type: 3}
+  m_PrefabInstance: {fileID: 1287680987}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1287680987
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: eb987a1f1d8077f44a8aee72d3c01ea7, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 545.8998
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: eb987a1f1d8077f44a8aee72d3c01ea7, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 545.8998
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: eb987a1f1d8077f44a8aee72d3c01ea7, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 545.8998
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: eb987a1f1d8077f44a8aee72d3c01ea7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: eb987a1f1d8077f44a8aee72d3c01ea7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 18.015
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: eb987a1f1d8077f44a8aee72d3c01ea7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 13.1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: eb987a1f1d8077f44a8aee72d3c01ea7, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071067
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: eb987a1f1d8077f44a8aee72d3c01ea7, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: eb987a1f1d8077f44a8aee72d3c01ea7, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: eb987a1f1d8077f44a8aee72d3c01ea7, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: eb987a1f1d8077f44a8aee72d3c01ea7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: eb987a1f1d8077f44a8aee72d3c01ea7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: eb987a1f1d8077f44a8aee72d3c01ea7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: eb987a1f1d8077f44a8aee72d3c01ea7, type: 3}
+      propertyPath: m_Name
+      value: FireEscape
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: eb987a1f1d8077f44a8aee72d3c01ea7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: eb987a1f1d8077f44a8aee72d3c01ea7, type: 3}
 --- !u!1 &1840961424
 GameObject:
   m_ObjectHideFlags: 0
@@ -825,6 +904,7 @@ MonoBehaviour:
   maxPublicRating: 5
   startingPublicRating: 2.5
   currentPublicRating: 0
+  failObject: {fileID: 1123095609}
 --- !u!1 &1895373606
 GameObject:
   m_ObjectHideFlags: 0
@@ -1049,3 +1129,4 @@ SceneRoots:
   - {fileID: 58632780}
   - {fileID: 1601508083622977061}
   - {fileID: 285970438}
+  - {fileID: 1287680987}

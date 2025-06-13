@@ -146,6 +146,8 @@ public class Passenger : MonoBehaviour
             }
 
             isInsideTrain = false;
+
+            GameManager.instance.Board.spawnedPassengers.Remove(this);
             Destroy(gameObject);
         }
     }

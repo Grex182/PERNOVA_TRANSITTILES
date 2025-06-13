@@ -31,6 +31,8 @@ public class Passenger : MonoBehaviour
     {
         assignedColor = (StationColor)Random.Range(0, System.Enum.GetValues(typeof(StationColor)).Length);
         Debug.Log("Assigned Color: " + assignedColor);
+
+        Debug.Log("Can't find " + gameObject.name);
         SetPassengerStation(gameObject, assignedColor.ToString());
     }
 
@@ -125,24 +127,27 @@ public class Passenger : MonoBehaviour
 
     public virtual void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("TrainTile") && !isInsideTrain && !StationManager.instance.isTrainMoving)
+        if (other.CompareTag("TrainTile") && !isInsideTrain && !GameManager.instance.StationManager.isTrainMoving)
         {
             isInsideTrain = true;
 
             Debug.Log("Passenger entered train.");
         }
-        else if (other.CompareTag("ExitTile") && isInsideTrain && !StationManager.instance.isTrainMoving)
+        else if (other.CompareTag("PlatformTile") && isInsideTrain && !GameManager.instance.StationManager.isTrainMoving && !GameManager.instance.StationManager.hasGameStarted)
         {
-            if (assignedColor == StationManager.instance.stationColor)
+            if (assignedColor == GameManager.instance.StationManager.stationColor)
             {
-                Debug.Log("YOU GOT A POINT");
+                GameManager.instance.ScoreManager.AddScore();
+                GameManager.instance.PublicRatingManager.AddPublicRating();
             }
             else
             {
-                Debug.Log("Welp, you just made someone mad ig");
+                GameManager.instance.PublicRatingManager.ReducePublicRating();
             }
 
             isInsideTrain = false;
+
+            GameManager.instance.Board.spawnedPassengers.Remove(this);
             Destroy(gameObject);
         }
     }
@@ -150,11 +155,11 @@ public class Passenger : MonoBehaviour
     private bool SetPassengerStation(GameObject passenger, string stationColor)
     {
         //could be changed to enum instead, but for now, its by gameObject name
-        if (gameObject.name.Contains("Girl"))
+        if (gameObject.name.Contains("Base"))
         {
-            Transform childTransform = passenger.transform.Find("Torso");
+            Transform childTransform = passenger.transform.Find("FemaleUpper/f_top_shirt");
 
-            MeshRenderer childMeshRenderer = childTransform.GetComponent<MeshRenderer>();
+            SkinnedMeshRenderer childMeshRenderer = childTransform.GetComponent<SkinnedMeshRenderer>();
 
             var material = childMeshRenderer.material;
             material.SetColor(ColorProperty, GetStationColor(stationColor));
@@ -162,7 +167,7 @@ public class Passenger : MonoBehaviour
         }
 
         #region NULL-CHECKS
-        if (!passenger.TryGetComponent<MeshRenderer>(out var meshRenderer))
+        if (!passenger.TryGetComponent<SkinnedMeshRenderer>(out var skinnedMeshRenderer))
         {
             Debug.LogError("No MeshRenderer found on passenger prefab.");
             return false;
@@ -170,6 +175,16 @@ public class Passenger : MonoBehaviour
         #endregion
 
         return true;
+    }
+
+    public void CheckPosition()
+    {
+        if (!isInsideTrain)
+        {
+            GameManager.instance.Board.spawnedPassengers.Remove(this);
+
+            Destroy(gameObject);
+        }
     }
 
     private static readonly string[] validStationColors = new string[]

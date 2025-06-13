@@ -15,10 +15,6 @@ public enum StationColor
 
 public class StationManager : Singleton<StationManager>
 {
-    [SerializeField] Board _board;
-
-    public Board Board { get { return _board; } set { _board = value; } }
-
     [Header("Colors")]
     [SerializeField] public StationColor stationColor;
 
@@ -28,18 +24,16 @@ public class StationManager : Singleton<StationManager>
 
     [Header("Booleans")]
     [SerializeField] public bool isTrainMoving = false;
+    [SerializeField] public bool hasGameStarted = true;
+    [SerializeField] public bool isMovingRight = false;
 
     private int currentStationIndex = 0;
     private int direction = 1; // 1 = forward, -1 = backward
-    public static StationManager instance;
-
-    private void Awake()
-    {
-        instance = this;
-    }
 
     private void Start()
     {
+        GameManager.instance.StationManager = this;
+
         stationColor = StationColor.Red;
 
         StartCoroutine(StationTimer());
@@ -49,8 +43,14 @@ public class StationManager : Singleton<StationManager>
     {
         yield return new WaitForSeconds(stationTime);
 
-        Board.DisablePlatformTiles();
+        GameManager.instance.Board.DisablePlatformTiles();
         isTrainMoving = true;
+
+        if (hasGameStarted)
+        {
+            hasGameStarted = false;
+        }
+
         Debug.Log("Train is now moving");
 
         StartCoroutine(TravelTimer());
@@ -60,7 +60,7 @@ public class StationManager : Singleton<StationManager>
     {
         yield return new WaitForSeconds(travelTime);
 
-        Board.EnablePlatformTiles();
+        GameManager.instance.Board.EnablePlatformTiles();
         isTrainMoving = false;
         Debug.Log("Train has stopped");
 
@@ -82,11 +82,15 @@ public class StationManager : Singleton<StationManager>
         {
             currentStationIndex = totalStations - 2; // go one step before last
             direction = -1;
+
+            isMovingRight = true;
         }
         else if (currentStationIndex < 0)
         {
             currentStationIndex = 1; // go one step after first
             direction = 1;
+
+            isMovingRight = false;
         }
 
         // Set new station color

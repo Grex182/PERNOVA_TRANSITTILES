@@ -36,10 +36,10 @@ public class StationManager : Singleton<StationManager>
 
         stationColor = StationColor.Red;
 
-        StartCoroutine(StationTimer());
+        StartCoroutine(StartStationTimer());
     }
 
-    public IEnumerator StationTimer()
+    public IEnumerator StartStationTimer()
     {
         yield return new WaitForSeconds(stationTime);
 
@@ -67,7 +67,7 @@ public class StationManager : Singleton<StationManager>
 
         UpdateStationColor();
 
-        StartCoroutine(StationTimer());
+        StartCoroutine(StartStationTimer());
     }
 
     private void UpdateStationColor()

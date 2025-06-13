@@ -26,14 +26,14 @@ public class StageSectionEnd : MonoBehaviour
             switch(sectionEndPosition)
             {
                 case SectionEndPosition.Left:
-                    if (!GameManager.instance.StationManager.isMovingRight)
+                    if (!GameManager.instance.StationManager.isMovingRight && GameManager.instance.StationManager.isTrainMoving)
                     {
                         GameManager.instance.StageSpawner.SpawnStageSection();
                         StartCoroutine(GameManager.instance.StageSpawner.DestroyStageSection(transform.parent.gameObject));
                     }
                     break;
                 case SectionEndPosition.Right:
-                    if (GameManager.instance.StationManager.isMovingRight)
+                    if (GameManager.instance.StationManager.isMovingRight && GameManager.instance.StationManager.isTrainMoving)
                     {
                         GameManager.instance.StageSpawner.SpawnStageSection();
                         StartCoroutine(GameManager.instance.StageSpawner.DestroyStageSection(transform.parent.gameObject));

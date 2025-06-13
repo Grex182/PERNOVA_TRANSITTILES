@@ -58,7 +58,5 @@ public class StageSpawner : MonoBehaviour
         spawnerStageSectionSpawnPoint = startingStageSection.GetComponentInChildren<StageSectionEnd>().GetNextSpawnPoint();
 
         Debug.Log("Spawned Starting Stage");
-
-        StartCoroutine(DestroyStageSection(startingStageSection));
     }
 }

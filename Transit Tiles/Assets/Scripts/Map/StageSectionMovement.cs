@@ -8,6 +8,9 @@ public class StageSectionMovement : MonoBehaviour
 
     private void Update()
     {
-        transform.position += Vector3.right * moveSpeed * Time.deltaTime;
+        if (GameManager.instance.StationManager.isTrainMoving)
+        {
+            transform.position += Vector3.right * moveSpeed * Time.deltaTime;
+        }
     }
 }

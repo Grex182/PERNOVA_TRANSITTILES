@@ -22,10 +22,18 @@ public class GameManager : Singleton<GameManager>
 
     public ScoreManager ScoreManager { get { return _scoreManager; } set { _scoreManager = value; } }
 
+    [SerializeField] StageSpawner _stageSpawner;
+
+    public StageSpawner StageSpawner { get { return _stageSpawner; } set { _stageSpawner = value; } }
+
     public static GameManager instance;
 
     private void Awake()
     {
         instance = this;
+    }
+
+    private void Start()
+    {
     }
 }

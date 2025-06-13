@@ -35,6 +35,7 @@ public class Board : MonoBehaviour
 
     private Passenger[,] passengers;
     [SerializeField] private List<GameObject> platformTiles = new List<GameObject>();
+    [SerializeField] private List<GameObject> platformTilePrefabs = new List<GameObject>();
     private Passenger currentlyDragging;
     private List<Vector2Int> availableMoves = new List<Vector2Int>();
     [SerializeField] private int tileCountX = 8;
@@ -304,7 +305,13 @@ public class Board : MonoBehaviour
                 }
                 else if (GetComponent<BoardData>().IsMatchingTileSet(TileSetType.PlatformTiles, tilePos))
                 {
-                    Instantiate(platformTile, new Vector3(GetTileCenter(x, y).x, yOffsetFloorTile, GetTileCenter(x, y).z), Quaternion.Euler(-90, 0, 0));
+                    //Instantiate(platformTile, new Vector3(GetTileCenter(x, y).x, yOffsetFloorTile, GetTileCenter(x, y).z), Quaternion.Euler(-90, 0, 0));
+
+                    if (!GetComponent<BoardData>().IsMatchingTileSet(TileSetType.OccupiedTiles, tilePos))
+                    {
+                        GameObject pt = Instantiate(platformTile, new Vector3(GetTileCenter(x, y).x, yOffsetFloorTile, GetTileCenter(x, y).z), Quaternion.Euler(-90, 0, 0));
+                        platformTilePrefabs.Add(pt);
+                    }
                 }
                 else
                 {
@@ -488,6 +495,11 @@ public class Board : MonoBehaviour
         {
             tile.layer = LayerMask.NameToLayer("Unavailable");
         }
+
+        foreach (var pt in platformTilePrefabs)
+        {
+            pt.GetComponent<MeshRenderer>().enabled = false;
+        }
     }
 
     public void EnablePlatformTiles()
@@ -495,6 +507,11 @@ public class Board : MonoBehaviour
         foreach (var tile in platformTiles)
         {
             tile.layer = LayerMask.NameToLayer("Tile");
+        }
+
+        foreach (var pt in platformTilePrefabs)
+        {
+            pt.GetComponent<MeshRenderer>().enabled = true;
         }
     }
 

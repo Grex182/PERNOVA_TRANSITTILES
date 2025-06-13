@@ -12,6 +12,7 @@ TagManager:
   - Draggable
   - CardSlot
   - ActivateCard
+  - PlatformTile
   layers:
   - Default
   - TransparentFX

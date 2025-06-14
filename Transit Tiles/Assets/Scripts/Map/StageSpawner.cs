@@ -6,7 +6,7 @@ public class StageSpawner : MonoBehaviour
 {
     [Header("Transforms")]
     [SerializeField] Transform initialSpawnPoint;
-    [SerializeField] Transform spawnerStageSectionSpawnPoint;
+    //[SerializeField] Transform spawnerStageSectionSpawnPoint;
 
     [Header("Prefabs")]
     [SerializeField] GameObject _stageSectionPrefab;
@@ -22,8 +22,8 @@ public class StageSpawner : MonoBehaviour
     {
         GameManager.instance.StageSpawner = this;
 
-        if (!spawnerStageSectionSpawnPoint)
-            spawnerStageSectionSpawnPoint = initialSpawnPoint;
+/*        if (!spawnerStageSectionSpawnPoint)
+            spawnerStageSectionSpawnPoint = initialSpawnPoint;*/
 
         StartStage();
     }
@@ -38,24 +38,30 @@ public class StageSpawner : MonoBehaviour
         Debug.Log("Stage has been destroyed");
     }
 
-    public void SpawnStageSection()
+    public void SpawnStageSection(StageSectionEnd stageSectionEnd, Transform spawnPoint)
     {
-        // Spawn the next stage section at the current stage's spawn point
-        GameObject newStageSection = Instantiate(_stageSectionPrefab, 
-                                                 new Vector3(spawnerStageSectionSpawnPoint.position.x, spawnerStageSectionSpawnPoint.position.y, spawnerStageSectionSpawnPoint.position.z), 
-                                                 Quaternion.Euler(-89.98f, spawnerStageSectionSpawnPoint.rotation.eulerAngles.y, spawnerStageSectionSpawnPoint.rotation.eulerAngles.z));
+        GameObject newStageSection = Instantiate(_stageSectionPrefab, spawnPoint.position, Quaternion.Euler(-89.98f, spawnPoint.rotation.eulerAngles.y, spawnPoint.rotation.eulerAngles.z));
 
-        // Update the spawn point to the new stage section's spawn point
-        spawnerStageSectionSpawnPoint = newStageSection.GetComponentInChildren<StageSectionEnd>().GetNextSpawnPoint();
+        //spawnerStageSectionSpawnPoint = spawnPoint;
+
+        stageSectionEnd = newStageSection.GetComponentInChildren<StageSectionEnd>(); //Gets the StageSectionEnd from the newStageSection
+        if (stageSectionEnd != null)
+        {
+            //spawnerStageSectionSpawnPoint = stageSectionEnd.GetNextSpawnPoint();
+        }
+        else
+        {
+            Debug.LogWarning("Spawned stage section has no StageSectionEnd component!");
+        }
 
         Debug.Log("Spawned Next Stage Section");
     }
 
     public void StartStage()
     {
-        GameObject startingStageSection = Instantiate(_stageSectionPrefab, new Vector3(stagePosition.x, stagePosition.y, stagePosition.z), Quaternion.Euler(-89.98f, spawnerStageSectionSpawnPoint.rotation.eulerAngles.y, spawnerStageSectionSpawnPoint.rotation.eulerAngles.z));
+        GameObject startingStageSection = Instantiate(_stageSectionPrefab, new Vector3(stagePosition.x, stagePosition.y, stagePosition.z), Quaternion.Euler(-89.98f, initialSpawnPoint.rotation.eulerAngles.y, initialSpawnPoint.rotation.eulerAngles.z));
 
-        spawnerStageSectionSpawnPoint = startingStageSection.GetComponentInChildren<StageSectionEnd>().GetNextSpawnPoint();
+        //spawnerStageSectionSpawnPoint = startingStageSection.GetComponentInChildren<StageSectionEnd>().GetNextSpawnPoint();
 
         Debug.Log("Spawned Starting Stage");
     }

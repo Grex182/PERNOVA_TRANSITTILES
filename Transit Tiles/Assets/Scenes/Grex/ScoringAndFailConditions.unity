@@ -254,7 +254,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stationColor: 0
   stationTime: 10
-  travelTime: 15
+  travelTime: 10
   isTrainMoving: 0
   hasGameStarted: 1
   isMovingRight: 0
@@ -589,7 +589,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initialSpawnPoint: {fileID: 285970438}
-  spawnerStageSectionSpawnPoint: {fileID: 0}
   _stageSectionPrefab: {fileID: 4730472920973606473, guid: 4f89cb3492a79304ea92605b045d863f, type: 3}
   destroySectionDelay: 10
   stagePosition: {x: -29.2, y: -2.2, z: -0.7}
@@ -779,6 +778,7 @@ MonoBehaviour:
   _publicRatingManager: {fileID: 0}
   _scoreManager: {fileID: 0}
   _stageSpawner: {fileID: 0}
+  gameState: 0
 --- !u!1 &1123095609 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: eb987a1f1d8077f44a8aee72d3c01ea7, type: 3}

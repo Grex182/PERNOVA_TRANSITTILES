@@ -8,9 +8,13 @@ public class StageSectionMovement : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.instance.StationManager.isTrainMoving)
+        if (GameManager.instance.StationManager.isTrainMoving && !GameManager.instance.StationManager.isMovingRight)
         {
             transform.position += Vector3.right * moveSpeed * Time.deltaTime;
+        }
+        else if (GameManager.instance.StationManager.isTrainMoving && GameManager.instance.StationManager.isMovingRight)
+        {
+            transform.position += Vector3.left * moveSpeed * Time.deltaTime;
         }
     }
 }

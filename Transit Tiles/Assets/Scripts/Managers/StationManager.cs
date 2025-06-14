@@ -36,6 +36,8 @@ public class StationManager : Singleton<StationManager>
 
         stationColor = StationColor.Red;
 
+        Debug.Log("Number of Stations: " + System.Enum.GetValues(typeof(StationColor)).Length);
+
         StartCoroutine(StartStationTimer());
     }
 
@@ -79,16 +81,16 @@ public class StationManager : Singleton<StationManager>
         currentStationIndex += direction;
 
         // If we hit the bounds, reverse direction
-        if (currentStationIndex >= totalStations)
+        if (currentStationIndex >= totalStations - 1)
         {
-            currentStationIndex = totalStations - 2; // go one step before last
+            currentStationIndex = totalStations - 1; // go one step before last
             direction = -1;
 
             isMovingRight = true;
         }
-        else if (currentStationIndex < 0)
+        else if (currentStationIndex <= 0)
         {
-            currentStationIndex = 1; // go one step after first
+            currentStationIndex = 0; // go one step after first
             direction = 1;
 
             isMovingRight = false;

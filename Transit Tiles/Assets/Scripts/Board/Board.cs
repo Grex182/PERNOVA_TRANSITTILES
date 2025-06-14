@@ -357,38 +357,47 @@ public class Board : MonoBehaviour
     //Spawning Pieces
     public void SpawnAllPieces()
     {
+        //if we want to have a random amount of passengers be spawned, and ig 8 passengers will be the maximum spawns
+        /*        if (passengers == null)
+                {
+                    passengers = new Passenger[tileCountX, tileCountY];
+                }
+
+                for (int i = 0; i < 8; i++)
+                {
+                    int randomPositionX = Random.Range(7, 10);
+                    int randomPositionY = Random.Range(0, 4);
+
+                    if (passengers[randomPositionX, randomPositionY] == null)
+                    {
+                        passengers[randomPositionX, randomPositionY] = SpawnSinglePiece(PassengerType.Standard); //The enum inside the parenthesis here should also be randomized once other types of passengers have been made
+                        tiles[randomPositionX, randomPositionY].layer = LayerMask.NameToLayer("Occupied");
+                    }
+
+                    //passengers[randomPositionX, randomPositionY] = SpawnSinglePiece(PassengerType.Standard); //The enum inside the parenthesis here should also be randomized once other types of passengers have been made
+                }*/
+
+        //if we want to ALWAYS have 8 passengers be spawned
         if (passengers == null)
         {
             passengers = new Passenger[tileCountX, tileCountY];
         }
 
-        for (int i = 0; i < 8; i++)
+        int spawnCount = 0;
+
+        while (spawnCount < 8)
         {
-            int randomPositionX = Random.Range(7, 10);
-            int randomPositionY = Random.Range(0, 4);
+            int randomPositionX = Random.Range(7, 10); // 7, 8, 9
+            int randomPositionY = Random.Range(0, 4);  // 0, 1, 2, 3
 
             if (passengers[randomPositionX, randomPositionY] == null)
             {
                 passengers[randomPositionX, randomPositionY] = SpawnSinglePiece(PassengerType.Standard);
                 tiles[randomPositionX, randomPositionY].layer = LayerMask.NameToLayer("Occupied");
+                spawnCount++;
             }
-
-            //passengers[randomPositionX, randomPositionY] = SpawnSinglePiece(PassengerType.Standard); //The enum inside the parenthesis here should also be randomized once other types of passengers have been made
+            // else: position is already taken, try again
         }
-
-        //the tiles[0, 0] part should be equal to the line before it, like if passengers[0, 3], then afterwards the tiles one should be tiles[0, 3] so that when it spawns, the tile below it has its layer set to "Occupied"
-
-        /*        passengers[8, 4] = SpawnSinglePiece(PassengerType.Standard);
-                tiles[8, 4].layer = LayerMask.NameToLayer("Occupied");
-                passengers[7, 2] = SpawnSinglePiece(PassengerType.Standard);
-                tiles[7, 2].layer = LayerMask.NameToLayer("Occupied");
-                passengers[7, 4] = SpawnSinglePiece(PassengerType.Standard);
-                tiles[7, 4].layer = LayerMask.NameToLayer("Occupied");
-                passengers[8, 1] = SpawnSinglePiece(PassengerType.Standard);
-                tiles[8, 1].layer = LayerMask.NameToLayer("Occupied");
-                passengers[8, 0] = SpawnSinglePiece(PassengerType.Bulky);
-                tiles[8, 0].layer = LayerMask.NameToLayer("Occupied");
-                tiles[7, 0].layer = LayerMask.NameToLayer("Occupied");*/
     }
 
     private Passenger SpawnSinglePiece(PassengerType type)

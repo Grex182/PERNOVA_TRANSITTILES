@@ -17,6 +17,9 @@ public class Passenger : MonoBehaviour
 {
     public int currentX;
     public int currentY;
+
+    private float idleSwitchCooldown = 5f;
+
     public PassengerType type;
 
     private const string ColorProperty = "_BaseColor";
@@ -25,7 +28,14 @@ public class Passenger : MonoBehaviour
     private Vector3 desiredPosition;
     //[SerializeField] private Vector3 desiredScale = Vector3.one;
 
+    private Animator animator;
+
     [SerializeField] private bool isInsideTrain = false;
+
+    private void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
 
     private void Start()
     {
@@ -33,6 +43,8 @@ public class Passenger : MonoBehaviour
         Debug.Log("Assigned Color: " + assignedColor);
 
         SetPassengerStation(gameObject, assignedColor.ToString());
+
+        StartCoroutine(SwitchIdleAnimationCooldown());
     }
 
     private void Update()
@@ -184,6 +196,28 @@ public class Passenger : MonoBehaviour
 
             Destroy(gameObject);
         }
+    }
+
+    private IEnumerator SwitchIdleAnimationCooldown()
+    {
+        int randomCooldownNumber = Random.Range(5, 14);
+
+        yield return new WaitForSeconds(randomCooldownNumber);
+
+        int randomNumber = Random.Range(1, 3);
+
+        if (randomNumber == 1)
+        {
+            animator.SetTrigger("isIdle1");
+        }
+        else if (randomNumber == 2)
+        {
+            animator.SetTrigger("isIdle2");
+        }
+
+        Debug.Log("Animations are starting");
+
+        StartCoroutine(SwitchIdleAnimationCooldown());
     }
 
     private static readonly string[] validStationColors = new string[]

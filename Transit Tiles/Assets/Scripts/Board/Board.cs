@@ -24,7 +24,7 @@ public class Board : MonoBehaviour
     [Header("Prefabs & Materials")]
     [SerializeField] private GameObject[] prefabs;
     [SerializeField] private GameObject platformTile;
-    [SerializeField] private GameObject chairTile;
+    [SerializeField] public GameObject chairTile;
     [SerializeField] private GameObject trainTile;
     [SerializeField] private float yOffsetFloorTile;
     [SerializeField] private float yPositionOffset;
@@ -105,12 +105,15 @@ public class Board : MonoBehaviour
                 if (ContainsValidMove(ref availableMoves, currentHover))
                 {
                     tiles[currentHover.x, currentHover.y].layer = LayerMask.NameToLayer("MovableSpot");
+
+                    GetComponent<ChairModifier>().ChangeChairColor(currentHover, GetComponent<ChairModifier>().highlightMaterial.color);
                 }
                 else if (passengers[currentHover.x, currentHover.y] != null || tiles[currentHover.x, currentHover.y].layer == LayerMask.NameToLayer("Occupied"))
                 {
                     tiles[currentHover.x, currentHover.y].layer = LayerMask.NameToLayer("Occupied");
+                    GetComponent<ChairModifier>().TurnChairBackToOriginalColor(currentHover); //for chair to go back to original color
                 }
-                else if (tiles[currentHover.x, currentHover.y].layer == LayerMask.NameToLayer("Occupied") && passengers[currentHover.x, currentHover.y] == null)
+                else if (tiles[currentHover.x, currentHover.y].layer == LayerMask.NameToLayer("Occupied") && passengers[currentHover.x, currentHover.y] == null) //for bulky spot of bulky passengers
                 {
                     tiles[currentHover.x, currentHover.y].layer = LayerMask.NameToLayer("Occupied");
                 }
@@ -130,6 +133,8 @@ public class Board : MonoBehaviour
                 if (tiles[hitPosition.x, hitPosition.y].layer == LayerMask.NameToLayer("Occupied") && currentlyDragging != null/* && passengers[currentHover.x, currentHover.y] == null*//* && passengers[currentHover.x, currentHover.y] == null*/) //uncomment the && part if tile under passenger should turn green and not stay red
                 {
                     tiles[hitPosition.x, hitPosition.y].layer = LayerMask.NameToLayer("Occupied");
+
+                    //GetComponent<ChairModifier>().TurnChairBackToOriginalColor(hitPosition);
                 }
                 else if (tiles[hitPosition.x, hitPosition.y].layer == LayerMask.NameToLayer("Occupied") && passengers[hitPosition.x, hitPosition.y] == null)
                 {

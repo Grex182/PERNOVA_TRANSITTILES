@@ -11,11 +11,24 @@ public class ChairModifier : MonoBehaviour
 
     private Dictionary<Vector2Int, MeshRenderer> cachedSeats = new();
 
+    private void Start()
+    {
+        if (GetComponent<Board>().chairTile != null)
+        {
+            originalChairColor = GetComponent<Board>().chairTile.GetComponent<MeshRenderer>().sharedMaterials[1].color;
+            Debug.Log("Got originalChairColor!");
+        }
+        else
+        {
+            Debug.Log("Nope nothing");
+        }
+    }
+
     public void TurnChairBackToOriginalColor(Vector2Int position)
     {
         if (GameManager.instance.Board.tiles[position.x, position.y].tag == "ChairTile")
         {
-            Transform seat = GameManager.instance.Board.tiles[position.x, position.y].transform.Find("TileSeat(Clone)/Tile_Seat");
+            Transform seat = GameManager.instance.Board.tiles[position.x, position.y].transform.Find("TileSeat(Clone)");
             if (seat != null)
             {
                 MeshRenderer renderer = seat.GetComponent<MeshRenderer>();
@@ -34,7 +47,7 @@ public class ChairModifier : MonoBehaviour
             var renderer = GetSeatRenderer(position);
             if (renderer != null && renderer.materials.Length > 1)
             {
-                originalChairColor = renderer.materials[1].color;
+                //originalChairColor = renderer.materials[1].color;
                 renderer.materials[1].color = hoverMaterial.color;
             }
         }
@@ -48,7 +61,7 @@ public class ChairModifier : MonoBehaviour
             if (renderer != null && renderer.materials.Length > 1)
             {
                 //NEED TO ADD AN IF STATEMENT HERE FOR THE originalChairColor thing so that it checks if its already their so that it wont be changing everytime its called
-                originalChairColor = renderer.materials[1].color;
+                //originalChairColor = renderer.materials[1].color;
                 renderer.materials[1].color = color;
             }
             /*            Transform seat = tiles[position.x, position.y].transform.Find("TileSeat(Clone)/Tile_Seat");
@@ -70,7 +83,7 @@ public class ChairModifier : MonoBehaviour
     {
         if (!cachedSeats.TryGetValue(pos, out var renderer))
         {
-            var seat = GameManager.instance.Board.tiles[pos.x, pos.y].transform.Find("TileSeat(Clone)/Tile_Seat");
+            var seat = GameManager.instance.Board.tiles[pos.x, pos.y].transform.Find("TileSeat(Clone)");
             if (seat != null)
             {
                 renderer = seat.GetComponent<MeshRenderer>();

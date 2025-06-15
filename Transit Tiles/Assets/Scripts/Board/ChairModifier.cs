@@ -6,8 +6,9 @@ public class ChairModifier : MonoBehaviour
 {
     [Header("Colors & Materials")]
     [SerializeField] private Color originalChairColor;
-    [SerializeField] private Material hoverMaterial;
+    [SerializeField] public Material hoverMaterial;
     [SerializeField] public Material highlightMaterial;
+    [SerializeField] public Material occupiedMaterial;
 
     private Dictionary<Vector2Int, MeshRenderer> cachedSeats = new();
 

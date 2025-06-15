@@ -82,6 +82,7 @@ public class Board : MonoBehaviour
                 if (tiles[hitPosition.x, hitPosition.y].layer == LayerMask.NameToLayer("Occupied") && currentlyDragging != null/* && passengers[currentHover.x, currentHover.y] == null*//* && passengers[currentHover.x, currentHover.y] == null*/) //uncomment the && part if tile under passenger should turn green and not stay red
                 {
                     tiles[hitPosition.x, hitPosition.y].layer = LayerMask.NameToLayer("Occupied");
+                    GetComponent<ChairModifier>().ChangeChairColor(currentHover, GetComponent<ChairModifier>().occupiedMaterial.color);
                 }
                 else if (tiles[hitPosition.x, hitPosition.y].layer == LayerMask.NameToLayer("Occupied") && passengers[hitPosition.x, hitPosition.y] == null)
                 {
@@ -111,7 +112,8 @@ public class Board : MonoBehaviour
                 else if (passengers[currentHover.x, currentHover.y] != null || tiles[currentHover.x, currentHover.y].layer == LayerMask.NameToLayer("Occupied"))
                 {
                     tiles[currentHover.x, currentHover.y].layer = LayerMask.NameToLayer("Occupied");
-                    GetComponent<ChairModifier>().TurnChairBackToOriginalColor(currentHover); //for chair to go back to original color
+                    GetComponent<ChairModifier>().ChangeChairColor(currentHover, GetComponent<ChairModifier>().occupiedMaterial.color);
+                    //GetComponent<ChairModifier>().TurnChairBackToOriginalColor(currentHover); //for chair to go back to original color
                 }
                 else if (tiles[currentHover.x, currentHover.y].layer == LayerMask.NameToLayer("Occupied") && passengers[currentHover.x, currentHover.y] == null) //for bulky spot of bulky passengers
                 {
@@ -134,7 +136,7 @@ public class Board : MonoBehaviour
                 {
                     tiles[hitPosition.x, hitPosition.y].layer = LayerMask.NameToLayer("Occupied");
 
-                    //GetComponent<ChairModifier>().TurnChairBackToOriginalColor(hitPosition);
+                    GetComponent<ChairModifier>().ChangeChairColor(currentHover, GetComponent<ChairModifier>().occupiedMaterial.color);
                 }
                 else if (tiles[hitPosition.x, hitPosition.y].layer == LayerMask.NameToLayer("Occupied") && passengers[hitPosition.x, hitPosition.y] == null)
                 {
@@ -172,6 +174,8 @@ public class Board : MonoBehaviour
 
                 tiles[previousPosition.x, previousPosition.y].layer = LayerMask.NameToLayer("Tile");
 
+                GetComponent<ChairModifier>().TurnChairBackToOriginalColor(previousPosition);
+
                 bool validMove = MoveTo(currentlyDragging, hitPosition.x, hitPosition.y);
 
 /*                if (currentlyDragging.type == PassengerType.Bulky)
@@ -201,11 +205,17 @@ public class Board : MonoBehaviour
                     }*/
 
                     currentlyDragging.SetPosition(GetTileCenter(previousPosition.x, previousPosition.y));
+                    tiles[previousPosition.x, previousPosition.y].layer = LayerMask.NameToLayer("Occupied");
+                    GetComponent<ChairModifier>().ChangeChairColor(previousPosition, GetComponent<ChairModifier>().occupiedMaterial.color);
+                }
+                else if (validMove)
+                {
+                    tiles[currentlyDragging.currentX, currentlyDragging.currentY].layer = LayerMask.NameToLayer("Unavailable"); //WHY DOES THIS WORK CHECK CHECK CHECK
+
+                    GetComponent<ChairModifier>().ChangeChairColor(currentHover, GetComponent<ChairModifier>().hoverMaterial.color);
                 }
 
                 RemoveMovableTiles();
-
-                tiles[currentlyDragging.currentX, currentlyDragging.currentY].layer = LayerMask.NameToLayer("Hover");
 
                 currentlyDragging = null;
             }

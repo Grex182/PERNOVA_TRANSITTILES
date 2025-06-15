@@ -35,10 +35,10 @@ public class BoardData : MonoBehaviour
     //Apply TrainTiles tag on tiles at the start
     private readonly HashSet<Vector2Int> tagTrainTilesAtStart = new HashSet<Vector2Int>
     {
-        new Vector2Int(11, 7),  new Vector2Int(11, 8),  new Vector2Int(11, 9),  new Vector2Int(11, 10), new Vector2Int(11, 11),
-        new Vector2Int(10, 7),  new Vector2Int(10, 8),  new Vector2Int(10, 9),  new Vector2Int(10, 10), new Vector2Int(10, 11),
-        new Vector2Int(9, 7),   new Vector2Int(9, 8),   new Vector2Int(9, 9),   new Vector2Int(9, 10),  new Vector2Int(9, 11),
-        new Vector2Int(8, 7),   new Vector2Int(8, 8),   new Vector2Int(8, 9),   new Vector2Int(8, 10),  new Vector2Int(8, 11),
+        new Vector2Int(11, 7),  new Vector2Int(11, 8),  new Vector2Int(11, 9),  new Vector2Int(11, 10), new Vector2Int(11, 11), new Vector2Int(10, 6),
+        new Vector2Int(10, 7),  new Vector2Int(10, 8),  new Vector2Int(10, 9),  new Vector2Int(10, 10), new Vector2Int(10, 11), new Vector2Int(9, 6),
+        new Vector2Int(9, 7),   new Vector2Int(9, 8),   new Vector2Int(9, 9),   new Vector2Int(9, 10),  new Vector2Int(9, 11),  new Vector2Int(8, 6),
+        new Vector2Int(8, 7),   new Vector2Int(8, 8),   new Vector2Int(8, 9),   new Vector2Int(8, 10),  new Vector2Int(8, 11),  new Vector2Int(7, 6),
         new Vector2Int(7, 7),   new Vector2Int(7, 8),   new Vector2Int(7, 9),   new Vector2Int(7, 10),  new Vector2Int(7, 11),
         new Vector2Int(6, 7),   new Vector2Int(6, 8),   new Vector2Int(6, 9),   new Vector2Int(6, 10),  new Vector2Int(6, 11),
         new Vector2Int(5, 7),   new Vector2Int(5, 8),   new Vector2Int(5, 9),   new Vector2Int(5, 10),  new Vector2Int(5, 11),

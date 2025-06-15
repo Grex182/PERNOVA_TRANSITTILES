@@ -28,9 +28,6 @@ public class Board : MonoBehaviour
     [SerializeField] private GameObject trainTile;
     [SerializeField] private float yOffsetFloorTile;
     [SerializeField] private float yPositionOffset;
-    [SerializeField] private Color originalChairColor;
-    [SerializeField] private Material hoverMaterial;
-    [SerializeField] private Material highlightMaterial;
 
     [Header("Lists")]
     [SerializeField] private List<GameObject> platformTiles = new List<GameObject>();
@@ -42,11 +39,10 @@ public class Board : MonoBehaviour
     private List<Vector2Int> availableMoves = new List<Vector2Int>();
     [SerializeField] private int tileCountX = 8;
     [SerializeField] private int tileCountY = 8;
-    private GameObject[,] tiles;
+    public GameObject[,] tiles;
     private Camera currentCamera;
     private Vector2Int currentHover;
     private Vector3 bounds;
-    private Dictionary<Vector2Int, MeshRenderer> cachedSeats = new();
 
     private void Awake()
     {
@@ -99,7 +95,7 @@ public class Board : MonoBehaviour
                 {
                     tiles[hitPosition.x, hitPosition.y].layer = LayerMask.NameToLayer("Hover");
 
-                    HoverChairColor(hitPosition);
+                    GetComponent<ChairModifier>().HoverChairColor(hitPosition);
                 }
             }
 
@@ -126,7 +122,7 @@ public class Board : MonoBehaviour
                 {
                     tiles[currentHover.x, currentHover.y].layer = LayerMask.NameToLayer("Tile");
 
-                    TurnChairBackToOriginalColor(currentHover);
+                    GetComponent<ChairModifier>().TurnChairBackToOriginalColor(currentHover);
                 }
 
                 currentHover = hitPosition;
@@ -147,7 +143,7 @@ public class Board : MonoBehaviour
                 {
                     tiles[hitPosition.x, hitPosition.y].layer = LayerMask.NameToLayer("Hover");
 
-                    HoverChairColor(hitPosition);
+                    GetComponent<ChairModifier>().HoverChairColor(hitPosition);
                 }
             }
 
@@ -240,7 +236,7 @@ public class Board : MonoBehaviour
                 {
                     tiles[currentHover.x, currentHover.y].layer = LayerMask.NameToLayer("Tile");
 
-                    TurnChairBackToOriginalColor(currentHover);
+                    GetComponent<ChairModifier>().TurnChairBackToOriginalColor(currentHover);
 
                     //Debug.Log("Tile has been set back to just being tile");
                 }
@@ -469,7 +465,7 @@ public class Board : MonoBehaviour
 
             tiles[availableMoves[i].x, availableMoves[i].y].layer = LayerMask.NameToLayer("MovableSpot");
 
-            ChangeChairColor(availableMoves[i], highlightMaterial.color);
+            GetComponent<ChairModifier>().ChangeChairColor(availableMoves[i], GetComponent<ChairModifier>().highlightMaterial.color);
         }
     }
     private void RemoveMovableTiles()
@@ -483,7 +479,7 @@ public class Board : MonoBehaviour
 
             tiles[availableMoves[i].x, availableMoves[i].y].layer = LayerMask.NameToLayer("Tile");
 
-            TurnChairBackToOriginalColor(availableMoves[i]);
+            GetComponent<ChairModifier>().TurnChairBackToOriginalColor(availableMoves[i]);
         }
 
         availableMoves.Clear();
@@ -590,75 +586,6 @@ public class Board : MonoBehaviour
         }
 
         return -Vector2Int.one; //Invalid
-    }
-
-    private void TurnChairBackToOriginalColor(Vector2Int position)
-    {
-        if (tiles[position.x, position.y].tag == "ChairTile")
-        {
-            Transform seat = tiles[position.x, position.y].transform.Find("TileSeat(Clone)/Tile_Seat");
-            if (seat != null)
-            {
-                MeshRenderer renderer = seat.GetComponent<MeshRenderer>();
-                if (renderer != null && renderer.materials.Length > 1)
-                {
-                    renderer.materials[1].color = originalChairColor;
-                }
-            }
-        }
-    }
-
-    private void HoverChairColor(Vector2Int position)
-    {
-        if (tiles[position.x, position.y].tag == "ChairTile")
-        {
-            var renderer = GetSeatRenderer(position);
-            if (renderer != null && renderer.materials.Length > 1)
-            {
-                originalChairColor = renderer.materials[1].color;
-                renderer.materials[1].color = hoverMaterial.color;
-            }
-        }
-    }
-
-    private void ChangeChairColor(Vector2Int position, Color color)
-    {
-        if (tiles[position.x, position.y].tag == "ChairTile")
-        {
-            var renderer = GetSeatRenderer(position);
-            if (renderer != null && renderer.materials.Length > 1)
-            {
-                //NEED TO ADD AN IF STATEMENT HERE FOR THE originalChairColor thing so that it checks if its already their so that it wont be changing everytime its called
-                originalChairColor = renderer.materials[1].color;
-                renderer.materials[1].color = color;
-            }
-            /*            Transform seat = tiles[position.x, position.y].transform.Find("TileSeat(Clone)/Tile_Seat");
-                        if (seat != null)
-                        {
-                            MeshRenderer renderer = seat.GetComponent<MeshRenderer>();
-
-                            originalChairColor = renderer.materials[1].color;
-
-                            if (renderer != null && renderer.materials.Length > 1)
-                            {
-                                renderer.materials[1].color = color;//new Color32(111, 164, 58, 255);
-                            }
-                        }*/
-        }
-    }
-
-    private MeshRenderer GetSeatRenderer(Vector2Int pos)
-    {
-        if (!cachedSeats.TryGetValue(pos, out var renderer))
-        {
-            var seat = tiles[pos.x, pos.y].transform.Find("TileSeat(Clone)/Tile_Seat");
-            if (seat != null)
-            {
-                renderer = seat.GetComponent<MeshRenderer>();
-                cachedSeats[pos] = renderer;
-            }
-        }
-        return renderer;
     }
 
     //Possible Debug stuff (Might need to move to GameManager?)

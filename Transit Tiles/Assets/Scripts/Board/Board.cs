@@ -91,6 +91,10 @@ public class Board : MonoBehaviour
                 {
                     tiles[hitPosition.x, hitPosition.y].layer = LayerMask.NameToLayer("Occupied");
                 }
+                else if (tiles[hitPosition.x, hitPosition.y].tag == "PlatformTile" && GameManager.instance.StationManager.isTrainMoving)
+                {
+                    tiles[hitPosition.x, hitPosition.y].layer = LayerMask.NameToLayer("Unavailable");
+                }
                 else
                 {
                     tiles[hitPosition.x, hitPosition.y].layer = LayerMask.NameToLayer("Hover");
@@ -114,7 +118,7 @@ public class Board : MonoBehaviour
                 {
                     tiles[currentHover.x, currentHover.y].layer = LayerMask.NameToLayer("Occupied");
                 }
-                else if (tiles[hitPosition.x, hitPosition.y].layer == LayerMask.NameToLayer("Unavailable"))
+                else if (tiles[hitPosition.x, hitPosition.y].layer == LayerMask.NameToLayer("Unavailable") && GameManager.instance.StationManager.isTrainMoving)
                 {
                     tiles[currentHover.x, currentHover.y].layer = LayerMask.NameToLayer("Unavailable");
                 }
@@ -134,6 +138,10 @@ public class Board : MonoBehaviour
                 else if (tiles[hitPosition.x, hitPosition.y].layer == LayerMask.NameToLayer("Occupied") && passengers[hitPosition.x, hitPosition.y] == null)
                 {
                     tiles[hitPosition.x, hitPosition.y].layer = LayerMask.NameToLayer("Occupied");
+                }
+                else if (GameManager.instance.StationManager.isTrainMoving)
+                {
+                    tiles[hitPosition.x, hitPosition.y].layer = LayerMask.NameToLayer("Unavailable");
                 }
                 else
                 {

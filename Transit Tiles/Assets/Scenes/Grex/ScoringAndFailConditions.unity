@@ -179,6 +179,7 @@ MonoBehaviour:
   platformTiles: []
   platformTilePrefabs: []
   spawnedPassengers: []
+  currentlyDragging: {fileID: 0}
   tileCountX: 18
   tileCountY: 11
 --- !u!4 &58632780
@@ -253,7 +254,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stationColor: 0
-  stationTime: 10
+  stationTime: 8
   travelTime: 10
   isTrainMoving: 0
   hasGameStarted: 1

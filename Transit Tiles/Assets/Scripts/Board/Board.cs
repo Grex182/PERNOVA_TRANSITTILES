@@ -38,7 +38,7 @@ public class Board : MonoBehaviour
     [SerializeField] public List<Passenger> spawnedPassengers = new List<Passenger>();
 
     private Passenger[,] passengers;
-    private Passenger currentlyDragging;
+    [SerializeField] private Passenger currentlyDragging;
     private List<Vector2Int> availableMoves = new List<Vector2Int>();
     [SerializeField] private int tileCountX = 8;
     [SerializeField] private int tileCountY = 8;
@@ -211,6 +211,14 @@ public class Board : MonoBehaviour
         }
         else
         {
+            //CHECK
+            //Removes the movabletiles from train if player is still holding on to a passenger
+            if (currentlyDragging == null|| (!currentlyDragging && currentHover != -Vector2Int.one && GameManager.instance.StationManager.isTrainMoving))
+            {
+                currentlyDragging = null;
+                RemoveMovableTiles();
+            }
+
             //if going out of bounds, change previous tile
             if (currentHover != -Vector2Int.one)
             {
@@ -236,6 +244,7 @@ public class Board : MonoBehaviour
 
                     //Debug.Log("Tile has been set back to just being tile");
                 }
+
                 currentHover = -Vector2Int.one;
             }
 
